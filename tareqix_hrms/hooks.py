@@ -277,3 +277,18 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+
+# Fixtures
+# --------
+# Custom fields owned by this app (module = "Tareqix Hrms"); imported on install and bench migrate.
+fixtures = [
+	{"dt": "Custom Field", "filters": [["module", "=", "Tareqix Hrms"]]},
+]
+
+
+# Client scripts for standard doctypes
+# ------------------------------------
+doctype_js = {
+	"Purchase Invoice": "public/js/purchase_invoice.js",
+}
