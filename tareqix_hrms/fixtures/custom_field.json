@@ -46,5 +46,17 @@
   "fetch_from": "employee.employee_name",
   "read_only": 1,
   "module": "Tareqix Hrms"
+ },
+ {
+  "doctype": "Custom Field",
+  "name": "Journal Entry Account-employee",
+  "dt": "Journal Entry Account",
+  "fieldname": "employee",
+  "fieldtype": "Link",
+  "label": "Employee",
+  "options": "Employee",
+  "insert_after": "cost_center",
+  "in_list_view": 1,
+  "module": "Tareqix Hrms"
  }
 ]
