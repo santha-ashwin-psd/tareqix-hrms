@@ -1,0 +1,108 @@
+{
+ "charts": [
+  {
+   "chart_name": "Employees by Company",
+   "label": "Employees by Company"
+  },
+  {
+   "chart_name": "Purchase Invoices Monthly",
+   "label": "Purchase Invoices Monthly"
+  },
+  {
+   "chart_name": "Net Pay Monthly",
+   "label": "Net Pay Monthly"
+  }
+ ],
+ "content": "[{\"id\": \"309ee8b087\", \"type\": \"header\", \"data\": {\"text\": \"\\u003cspan class=\\\"h4\\\"\\u003e\\u003cb\\u003eOverview\\u003c/b\\u003e\\u003c/span\\u003e\", \"col\": 12}}, {\"id\": \"a9bc59d167\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Employees\", \"col\": 3}}, {\"id\": \"a4d5fd473a\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Vendor Staff\", \"col\": 3}}, {\"id\": \"194e6ef651\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Salary Slips\", \"col\": 3}}, {\"id\": \"5db9752e5e\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Unpaid Purchase Invoices\", \"col\": 3}}, {\"id\": \"dec7c12776\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"4634a05c7c\", \"type\": \"header\", \"data\": {\"text\": \"\\u003cspan class=\\\"h4\\\"\\u003e\\u003cb\\u003eCharts\\u003c/b\\u003e\\u003c/span\\u003e\", \"col\": 12}}, {\"id\": \"97dde22a41\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Employees by Company\", \"col\": 6}}, {\"id\": \"a207755136\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Purchase Invoices Monthly\", \"col\": 6}}, {\"id\": \"2d299063c2\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Net Pay Monthly\", \"col\": 12}}, {\"id\": \"3e897f20cc\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"9494b6b179\", \"type\": \"header\", \"data\": {\"text\": \"\\u003cspan class=\\\"h4\\\"\\u003e\\u003cb\\u003eQuick Links\\u003c/b\\u003e\\u003c/span\\u003e\", \"col\": 12}}, {\"id\": \"18008830a1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Employees\", \"col\": 3}}, {\"id\": \"139769f96d\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Attendance\", \"col\": 3}}, {\"id\": \"43c2b84639\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Expense Claims\", \"col\": 3}}, {\"id\": \"e4215f50b8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payroll Entry\", \"col\": 3}}, {\"id\": \"767a9aa8e9\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Salary Slips\", \"col\": 3}}, {\"id\": \"f3225bd6dd\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Invoices\", \"col\": 3}}, {\"id\": \"af0361d9f1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Journal Entries\", \"col\": 3}}, {\"id\": \"b454b596c8\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payment Entries\", \"col\": 3}}]",
+ "creation": "2026-10-31 11:09:38.834404",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Tareqix Hrms",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-10-31 11:09:38.834404",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "Tareqix Hrms",
+ "number_cards": [
+  {
+   "label": "Active Employees",
+   "number_card_name": "Active Employees"
+  },
+  {
+   "label": "Vendor Staff",
+   "number_card_name": "Vendor Staff"
+  },
+  {
+   "label": "Draft Salary Slips",
+   "number_card_name": "Draft Salary Slips"
+  },
+  {
+   "label": "Unpaid Purchase Invoices",
+   "number_card_name": "Unpaid Purchase Invoices"
+  }
+ ],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Employees",
+   "link_to": "Employee",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Attendance",
+   "link_to": "Attendance",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Expense Claims",
+   "link_to": "Expense Claim",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Payroll Entry",
+   "link_to": "Payroll Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Salary Slips",
+   "link_to": "Salary Slip",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Purchase Invoices",
+   "link_to": "Purchase Invoice",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Journal Entries",
+   "link_to": "Journal Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Payment Entries",
+   "link_to": "Payment Entry",
+   "type": "DocType"
+  }
+ ],
+ "standard": 1,
+ "title": "Tareqix Hrms",
+ "type": "Workspace"
+}
