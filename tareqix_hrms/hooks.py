@@ -292,3 +292,13 @@ fixtures = [
 doctype_js = {
 	"Purchase Invoice": "public/js/purchase_invoice.js",
 }
+
+
+add_to_apps_screen = [
+    {
+        "name": "tareqix_hrms",
+        "logo": "/assets/tareqix_hrms/logo.png",
+        "title": "Tareqix HR",
+        "route": "/desk/tareqix-hrms",
+    }
+]
