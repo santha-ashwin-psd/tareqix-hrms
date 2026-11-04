@@ -58,5 +58,25 @@
   "insert_after": "cost_center",
   "in_list_view": 1,
   "module": "Tareqix Hrms"
+ },
+ {
+  "doctype": "Custom Field",
+  "name": "Employee-nationality",
+  "dt": "Employee",
+  "fieldname": "nationality",
+  "fieldtype": "Data",
+  "label": "Nationality",
+  "insert_after": "gender",
+  "module": "Tareqix Hrms"
+ },
+ {
+  "doctype": "Custom Field",
+  "name": "Employee-civil_id",
+  "dt": "Employee",
+  "fieldname": "civil_id",
+  "fieldtype": "Data",
+  "label": "Civil ID",
+  "insert_after": "nationality",
+  "module": "Tareqix Hrms"
  }
 ]

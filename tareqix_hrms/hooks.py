@@ -284,6 +284,7 @@ app_license = "mit"
 # Custom fields owned by this app (module = "Tareqix Hrms"); imported on install and bench migrate.
 fixtures = [
 	{"dt": "Custom Field", "filters": [["module", "=", "Tareqix Hrms"]]},
+	{"dt": "Print Format", "filters": [["name", "in", ["Monthly Attendance Sheet - Sign-off"]]]},
 ]
 
 
@@ -302,3 +303,11 @@ add_to_apps_screen = [
         "route": "/desk/tareqix-hrms",
     }
 ]
+
+
+# Monthly Attendance Sheet print format
+# ------------------------------------
+# Adds designation, nationality and civil ID to the report rows so the print format can show them.
+override_whitelisted_methods = {
+	"frappe.desk.query_report.run": "tareqix_hrms.utils.attendance_report.run",
+}
