@@ -286,7 +286,7 @@ app_license = "mit"
 
 fixtures = [
     {"dt": "Custom Field", "filters": [["module", "=", "Tareqix Hrms"]]},
-    {"dt": "Print Format", "filters": [["module", "=", "Tareqix Hrms"]]},
+    {"dt": "Print Format", "filters": [["name", "in", ["Monthly Attendance Sheet - Sign-off", "Salary Slip - Tareqix"]]]},
 ]
 
 
