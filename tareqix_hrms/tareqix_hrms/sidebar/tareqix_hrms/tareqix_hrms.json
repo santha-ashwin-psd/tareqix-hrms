@@ -186,39 +186,9 @@
    "indent": 0,
    "is_default_module": 0,
    "keep_closed": 0,
-   "label": "Employee Checkin",
-   "link_to": "Employee Checkin",
-   "link_type": "DocType",
-   "open_in_new_tab": 1,
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "added": 0,
-   "child": 1,
-   "collapsible": 1,
-   "hidden": 0,
-   "indent": 0,
-   "is_default_module": 0,
-   "keep_closed": 0,
    "label": "Vendor Employee Working Hours",
    "link_to": "Vendor Employee Working Hours",
    "link_type": "Report",
-   "open_in_new_tab": 1,
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "added": 0,
-   "child": 1,
-   "collapsible": 1,
-   "hidden": 0,
-   "indent": 0,
-   "is_default_module": 0,
-   "keep_closed": 0,
-   "label": "Vendor Checkin Tool",
-   "link_to": "vendor-checkin-tool",
-   "link_type": "Page",
    "open_in_new_tab": 1,
    "show_arrow": 0,
    "type": "Link"
@@ -314,7 +284,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-11-14 13:21:59.622944",
+ "modified": "2026-11-16 15:32:11.588304",
  "modified_by": "Administrator",
  "module": "Tareqix Hrms",
  "name": "Tareqix Hrms",

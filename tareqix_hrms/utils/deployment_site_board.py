@@ -54,6 +54,57 @@ def get_deployment_site_board_data():
     return columns
 
 
+# @frappe.whitelist()
+# def update_deployment_site(deployment, new_site):
+
+#     if not frappe.has_permission("Deployments", "write"):
+#         frappe.throw(_("You do not have permission to update Deployments."))
+
+#     if not deployment:
+#         frappe.throw(_("Deployment ID is required."))
+
+#     doc = frappe.get_doc("Deployments", deployment)
+
+#     doc.check_permission("write")
+
+#     new_site = (new_site or "").strip()
+
+#     if doc.custom_site == new_site:
+#         return {
+#             "success": True,
+#             "message": "Site is unchanged."
+#         }
+
+#     doc.custom_site = new_site
+#     doc.save()
+
+#     return {
+#         "success": True,
+#         "deployment": doc.name,
+#         "custom_site": doc.custom_site,
+#         "message": _("Deployment moved successfully.")
+#     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @frappe.whitelist()
 def update_deployment_site(deployment, new_site):
 
@@ -64,23 +115,35 @@ def update_deployment_site(deployment, new_site):
         frappe.throw(_("Deployment ID is required."))
 
     doc = frappe.get_doc("Deployments", deployment)
-
     doc.check_permission("write")
 
     new_site = (new_site or "").strip()
 
-    if doc.custom_site == new_site:
+    # Find the actual Project document using its project_name
+    project = frappe.db.get_value(
+        "Project",
+        {"project_name": new_site},
+        "name"
+    )
+
+    if not project:
+        frappe.throw(
+            _("Project not found for Project Name: {0}").format(new_site)
+        )
+
+    # Update only the Link field
+    if doc.custom_sites == project:
         return {
             "success": True,
-            "message": "Site is unchanged."
+            "message": "Project is unchanged."
         }
 
-    doc.custom_site = new_site
+    doc.custom_sites = project
     doc.save()
 
     return {
         "success": True,
         "deployment": doc.name,
-        "custom_site": doc.custom_site,
+        "custom_sites": doc.custom_sites,
         "message": _("Deployment moved successfully.")
     }

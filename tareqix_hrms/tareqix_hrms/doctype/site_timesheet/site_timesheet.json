@@ -98,9 +98,8 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-11-14 16:39:26.772948",
+ "modified": "2026-11-16 12:26:23.205276",
  "modified_by": "Administrator",
  "module": "Tareqix Hrms",
  "name": "Site TimeSheet",
@@ -117,7 +116,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "submit": 1,
    "write": 1
   }
  ],

@@ -1,5 +1,4 @@
-
-frappe.pages['employee-site-timesh'].on_page_load = function (wrapper) {
+frappe.pages['employee-site-timesh'].on_page_load = function(wrapper) {
 
     // =====================================================
     // SECTION 1: PAGE SETUP
@@ -629,7 +628,31 @@ overlay.find('.est-ok').hover(
     // SECTION 6: TOTAL HOURS CALCULATION
     // =====================================================
 
-    function calculate_total(in_time, out_time, break_hours) {
+    // function calculate_total(in_time, out_time, break_hours) {
+
+    //     const start = time_to_minutes(in_time);
+    //     const end = time_to_minutes(out_time);
+
+    //     if (start === null || end === null) {
+    //         return 0;
+    //     }
+
+    //     let minutes = end - start;
+
+    //     // Support overnight shifts
+    //     if (minutes < 0) {
+    //         minutes += 1440;
+    //     }
+
+    //     const break_minutes = Number(break_hours || 0) * 60;
+
+    //     return Math.max(0, (minutes - break_minutes) / 60);
+    // }
+
+
+
+
+    function calculate_total(in_time, out_time, break_time) {
 
         const start = time_to_minutes(in_time);
         const end = time_to_minutes(out_time);
@@ -645,10 +668,13 @@ overlay.find('.est-ok').hover(
             minutes += 1440;
         }
 
-        const break_minutes = Number(break_hours || 0) * 60;
+        // Break is now HH:mm, not decimal hours
+        const break_minutes = time_to_minutes(break_time) || 0;
 
         return Math.max(0, (minutes - break_minutes) / 60);
     }
+
+
 
 
     // =====================================================
@@ -690,8 +716,7 @@ overlay.find('.est-ok').hover(
         try {
 
             const deployments = await frappe.db.get_list(
-                'Deployments',
-                {
+                'Deployments', {
                     fields: ['custom_site'],
                     limit_page_length: 5000
                 }
@@ -702,8 +727,8 @@ overlay.find('.est-ok').hover(
             const unique_sites = [
                 ...new Set(
                     deployments
-                        .map(row => row.custom_site)
-                        .filter(site => site && site.trim())
+                    .map(row => row.custom_site)
+                    .filter(site => site && site.trim())
                 )
             ];
 
@@ -780,8 +805,7 @@ overlay.find('.est-ok').hover(
             // STEP 1: GET SUPPLIER FROM DEPLOYMENT
 
             const deployments = await frappe.db.get_list(
-                'Deployments',
-                {
+                'Deployments', {
                     fields: ['custom_vendor'],
                     filters: {
                         custom_site: selected_site
@@ -793,8 +817,8 @@ overlay.find('.est-ok').hover(
             const suppliers = [
                 ...new Set(
                     deployments
-                        .map(row => row.custom_vendor)
-                        .filter(Boolean)
+                    .map(row => row.custom_vendor)
+                    .filter(Boolean)
                 )
             ];
 
@@ -906,7 +930,7 @@ overlay.find('.est-ok').hover(
                 'employee_name',
                 'status',
                 'designation',
-				 'civil_id'
+                'civil_id'
             ];
 
             // STEP 1: GET EMPLOYEES FROM DEPLOYMENTS
@@ -916,8 +940,7 @@ overlay.find('.est-ok').hover(
             if (selected_site) {
 
                 const deployments = await frappe.db.get_list(
-                    'Deployments',
-                    {
+                    'Deployments', {
                         fields: [
                             'custom_site',
                             'custom_employee_id'
@@ -932,8 +955,8 @@ overlay.find('.est-ok').hover(
                 employee_ids = [
                     ...new Set(
                         deployments
-                            .map(row => row.custom_employee_id)
-                            .filter(Boolean)
+                        .map(row => row.custom_employee_id)
+                        .filter(Boolean)
                     )
                 ];
 
@@ -959,8 +982,7 @@ overlay.find('.est-ok').hover(
             }
 
             employees = await frappe.db.get_list(
-                'Employee',
-                {
+                'Employee', {
                     fields: fields,
                     filters: filters,
                     order_by: 'employee_name asc',
@@ -1005,8 +1027,7 @@ overlay.find('.est-ok').hover(
         try {
 
             const assignments = await frappe.db.get_list(
-                'Shift Assignment',
-                {
+                'Shift Assignment', {
                     fields: [
                         'employee',
                         'shift_type',
@@ -1041,8 +1062,7 @@ overlay.find('.est-ok').hover(
             if (shift_names.length) {
 
                 shifts = await frappe.db.get_list(
-                    'Shift Type',
-                    {
+                    'Shift Type', {
                         fields: [
                             'name',
                             'start_time',
@@ -1087,19 +1107,23 @@ overlay.find('.est-ok').hover(
             );
         }
     }
-// =====================================================
-// SECTION 12: RENDER EMPLOYEE TABLE
-// =====================================================
 
-function render_employees(shift_map) {
 
-    const tbody = $('#est-employee-rows');
 
-    tbody.empty();
 
-    if (!employees.length) {
+    // =====================================================
+    // SECTION 12: RENDER EMPLOYEE TABLE
+    // =====================================================
 
-        tbody.html(`
+    function render_employees(shift_map) {
+
+        const tbody = $('#est-employee-rows');
+
+        tbody.empty();
+
+        if (!employees.length) {
+
+            tbody.html(`
             <tr>
                 <td colspan="9" class="est-empty">
                     No Employees found for the selected Site.
@@ -1107,23 +1131,23 @@ function render_employees(shift_map) {
             </tr>
         `);
 
-        update_summary();
-        return;
-    }
+            update_summary();
+            return;
+        }
 
-    employees.forEach(emp => {
+        employees.forEach(emp => {
 
-        // Designation displayed in Trade column
-        const trade = emp.designation || '-';
+            // Designation displayed in Trade column
+            const trade = emp.designation || '-';
 
-        // Employee Civil ID
-        const civil_id = emp.civil_id || '-';
+            // Employee Civil ID
+            const civil_id = emp.civil_id || '-';
 
-        const normal_hours = shift_map[emp.name] || 0;
+            const normal_hours = shift_map[emp.name] || 0;
 
-        const employee_name = emp.employee_name || emp.name;
+            const employee_name = emp.employee_name || emp.name;
 
-        const row = $(`
+            const row = $(`
             <tr class="est-row"
                 data-employee="${escape_html(emp.name)}">
 
@@ -1186,11 +1210,13 @@ function render_employees(shift_map) {
     </button>
 </td>
                 <td>
-                    <input type="number"
-                        class="est-input est-break"
-                        value="0"
-                        min="0"
-                        step="0.25">
+<input type="hidden" class="est-break" value="00:00">
+
+<button type="button"
+    class="est-time-picker-btn est-break-picker-btn"
+    data-time-type="break">
+    BREAK - Select
+</button>
                 </td>
 
                 <td class="est-total">
@@ -1206,13 +1232,13 @@ function render_employees(shift_map) {
             </tr>
         `);
 
-        tbody.append(row);
+            tbody.append(row);
 
-    });
+        });
 
-    update_summary();
+        update_summary();
 
-}
+    }
     // =====================================================
     // SECTION 13: INPUT CHANGE EVENTS
     // TOTAL HOURS CALCULATION
@@ -1331,193 +1357,187 @@ function render_employees(shift_map) {
         }
     );
 
-// =====================================================
-// SECTION 18: APPLY STANDARD SHIFT
-// =====================================================
+    // =====================================================
+    // SECTION 18: APPLY STANDARD SHIFT
+    // =====================================================
 
-function normalize_time(value) {
+    function normalize_time(value) {
 
-    if (!value) return '';
+        if (!value) return '';
 
-    const parts = String(value).trim().split(':');
+        const parts = String(value).trim().split(':');
 
-    if (parts.length < 2) return '';
+        if (parts.length < 2) return '';
 
-    return String(parts[0]).padStart(2, '0') + ':' +
-        String(parts[1]).padStart(2, '0');
+        return String(parts[0]).padStart(2, '0') + ':' +
+            String(parts[1]).padStart(2, '0');
 
-}
+    }
 
 
-$(page.body).on('click', '#est-apply-shift', function() {
+    $(page.body).on('click', '#est-apply-shift', function() {
 
-    const in_time = normalize_time(standard_shift.in_time);
+        const in_time = normalize_time(standard_shift.in_time);
 
-    const out_time = normalize_time(standard_shift.out_time);
+        const out_time = normalize_time(standard_shift.out_time);
 
-    if (!in_time || !out_time) {
+        if (!in_time || !out_time) {
 
-        frappe.msgprint({
-            title: 'Shift Time Missing',
-            message: 'Supplier standard IN and OUT times are not configured.',
-            indicator: 'orange'
+            frappe.msgprint({
+                title: 'Shift Time Missing',
+                message: 'Supplier standard IN and OUT times are not configured.',
+                indicator: 'orange'
+            });
+
+            return;
+        }
+
+        if (!employees.length) {
+
+            frappe.msgprint('No Employees available for the selected Site.');
+
+            return;
+        }
+
+        $('.est-row').each(function() {
+
+            const row = $(this);
+
+            // // Set IN Time
+            // row.find('.est-in').val(in_time);
+
+            // // Set OUT Time
+            // row.find('.est-out').val(out_time);
+            set_est_time(row, 'in', in_time);
+            set_est_time(row, 'out', out_time);
+
+            // Recalculate Total Hours
+            const total = calculate_total(
+                in_time,
+                out_time,
+                row.find('.est-break').val()
+            );
+
+            row.find('.est-total-value').text(format_hours(total));
+
         });
 
-        return;
+        // Update Summary
+        update_summary();
+
+        frappe.show_alert({
+            message: 'Standard IN and OUT Shift Applied Successfully',
+            indicator: 'green'
+        });
+
+    });
+
+
+
+
+    /* =========================================================
+       SECTION 18A: COMPLETE BLACK & WHITE CLOCK TIME PICKER
+
+       Features:
+       1. Hour selection (1-12)
+       2. Minute selection (00-55, intervals of 5)
+       3. Automatic Hour to Minute switching
+       4. Click Hour / Minute input to switch clock
+       5. Manual hour and minute entry
+       6. AM / PM selection
+       7. Enhanced OK and CANCEL buttons
+       8. Saves time in HH:mm format
+       9. Automatically recalculates Total Hours
+    ========================================================= */
+
+
+    // =====================================================
+    // FORMAT TIME FOR BUTTON DISPLAY
+    // =====================================================
+
+    function format_est_time_display(value, type) {
+
+        if (!value) return '';
+
+        const parts = value.split(':');
+
+        if (type === 'break') {
+            return parts[0] + ':' + parts[1];
+        }
+
+        let hour = parseInt(parts[0], 10);
+
+        const minute = String(parts[1] || '00').padStart(2, '0');
+
+        const period = hour >= 12 ? 'PM' : 'AM';
+
+        hour = hour % 12 || 12;
+
+        return String(hour).padStart(2, '0') +
+            ':' + minute + ' ' + period;
+
     }
 
-    if (!employees.length) {
 
-        frappe.msgprint('No Employees available for the selected Site.');
+    // =====================================================
+    // SET TIME INTO IN / OUT INPUT AND BUTTON
+    // =====================================================
 
-        return;
-    }
+    function set_est_time(row, type, value) {
 
-    $('.est-row').each(function() {
+        const time = value ? value.substring(0, 5) : '';
 
-        const row = $(this);
+        row.find('.est-' + type).val(time);
 
-        // // Set IN Time
-        // row.find('.est-in').val(in_time);
-
-        // // Set OUT Time
-        // row.find('.est-out').val(out_time);
-		set_est_time(row, 'in', in_time);
-        set_est_time(row, 'out', out_time);
-
-        // Recalculate Total Hours
-        const total = calculate_total(
-            in_time,
-            out_time,
-            row.find('.est-break').val()
+        row.find(
+            `.est-time-picker-btn[data-time-type="${type}"]`
+        ).text(
+            time ?
+            type.toUpperCase() + ' - ' +
+            format_est_time_display(time, type) :
+            type.toUpperCase() + ' - Select'
         );
 
-        row.find('.est-total-value').text(format_hours(total));
-
-    });
-
-    // Update Summary
-    update_summary();
-
-    frappe.show_alert({
-        message: 'Standard IN and OUT Shift Applied Successfully',
-        indicator: 'green'
-    });
-
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================================================
-   SECTION 18A: COMPLETE BLACK & WHITE CLOCK TIME PICKER
-
-   Features:
-   1. Hour selection (1-12)
-   2. Minute selection (00-55, intervals of 5)
-   3. Automatic Hour to Minute switching
-   4. Click Hour / Minute input to switch clock
-   5. Manual hour and minute entry
-   6. AM / PM selection
-   7. Enhanced OK and CANCEL buttons
-   8. Saves time in HH:mm format
-   9. Automatically recalculates Total Hours
-========================================================= */
-
-
-// =====================================================
-// FORMAT TIME FOR BUTTON DISPLAY
-// =====================================================
-
-function format_est_time_display(value) {
-
-    if (!value) return '';
-
-    const parts = value.split(':');
-
-    let hour = parseInt(parts[0], 10);
-
-    const minute = String(parts[1] || '00').padStart(2, '0');
-
-    const period = hour >= 12 ? 'PM' : 'AM';
-
-    hour = hour % 12 || 12;
-
-    return String(hour).padStart(2, '0') +
-        ':' + minute + ' ' + period;
-
-}
-
-
-// =====================================================
-// SET TIME INTO IN / OUT INPUT AND BUTTON
-// =====================================================
-
-function set_est_time(row, type, value) {
-
-    const time = value ? value.substring(0, 5) : '';
-
-    row.find('.est-' + type).val(time);
-
-    row.find(
-        `.est-time-picker-btn[data-time-type="${type}"]`
-    ).text(
-        time
-            ? type.toUpperCase() + ' - ' +
-                format_est_time_display(time)
-            : type.toUpperCase() + ' - Select'
-    );
-
-}
-
-
-// =====================================================
-// OPEN CUSTOM CLOCK PICKER
-// =====================================================
-
-function open_est_time_picker($input, $btn, type) {
-
-    // Remove previously opened clock
-    $('.est-time-overlay').remove();
-
-    let hour = 9;
-    let minute = 0;
-    let period = 'AM';
-    let selection_mode = 'hour';
-
-    // Load existing selected time
-    const existing = $input.val();
-
-    if (existing) {
-
-        const parts = existing.split(':');
-
-        let h = parseInt(parts[0], 10);
-
-        minute = parseInt(parts[1], 10);
-
-        period = h >= 12 ? 'PM' : 'AM';
-
-        hour = h % 12 || 12;
     }
 
 
-    // =================================================
-    // CLOCK HTML
-    // =================================================
+    // =====================================================
+    // OPEN CUSTOM CLOCK PICKER
+    // =====================================================
 
-    const overlay = $(`
+    function open_est_time_picker($input, $btn, type) {
+
+        // Remove previously opened clock
+        $('.est-time-overlay').remove();
+
+        const is_break = type === 'break';
+
+        let hour = is_break ? 0 : 9;
+        let minute = 0;
+        let period = 'AM';
+        let selection_mode = 'hour';
+
+        // Load existing selected time
+        const existing = $input.val();
+
+        if (existing) {
+            const parts = existing.split(':');
+
+            const h = parseInt(parts[0], 10);
+            minute = parseInt(parts[1], 10) || 0;
+
+            if (is_break) {
+                hour = h;
+            } else {
+                period = h >= 12 ? 'PM' : 'AM';
+                hour = h % 12 || 12;
+            }
+        }
+        // =================================================
+        // CLOCK HTML
+        // =================================================
+
+        const overlay = $(`
 
         <div class="est-time-overlay">
 
@@ -1545,17 +1565,13 @@ function open_est_time_picker($input, $btn, type) {
                         autocomplete="off"
                         value="${String(minute).padStart(2, '0')}">
 
-                    <div class="est-period">
+<div class="est-period" style="${is_break ? 'display:none;' : ''}">
 
-                        <button type="button" class="est-am">
-                            AM
-                        </button>
+    <button type="button" class="est-am">AM</button>
 
-                        <button type="button" class="est-pm">
-                            PM
-                        </button>
+    <button type="button" class="est-pm">PM</button>
 
-                    </div>
+</div>
 
                 </div>
 
@@ -1582,701 +1598,826 @@ function open_est_time_picker($input, $btn, type) {
     `);
 
 
-    $('body').append(overlay);
+        $('body').append(overlay);
 
-    const dialog = overlay.find('.est-time-dialog');
-
-
-    // =================================================
-    // OVERLAY DESIGN
-    // =================================================
-
-    overlay.css({
-
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.48)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 99999,
-        backdropFilter: 'blur(2px)'
-
-    });
+        const dialog = overlay.find('.est-time-dialog');
 
 
-    // =================================================
-    // DIALOG DESIGN
-    // =================================================
+        // =================================================
+        // OVERLAY DESIGN
+        // =================================================
 
-    dialog.css({
+        overlay.css({
 
-        width: '360px',
-        maxWidth: '95vw',
-        background: '#ffffff',
-        color: '#111111',
-        padding: '22px',
-        border: '1px solid #dddddd',
-        borderRadius: '12px',
-        boxShadow: '0 12px 40px rgba(0,0,0,0.22)'
-
-    });
-
-
-    // =================================================
-    // TITLE DESIGN
-    // =================================================
-
-    overlay.find('.est-time-title').css({
-
-        fontSize: '11px',
-        color: '#777777',
-        marginBottom: '15px',
-        letterSpacing: '1px',
-        fontWeight: 'bold',
-        textAlign: 'center'
-
-    });
-
-
-    // =================================================
-    // TIME DISPLAY DESIGN
-    // =================================================
-
-    overlay.find('.est-time-display').css({
-
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '7px',
-        marginBottom: '22px'
-
-    });
-
-
-    overlay.find('.est-hour, .est-minute').css({
-
-        width: '65px',
-        height: '52px',
-        fontSize: '27px',
-        textAlign: 'center',
-        background: '#f1f1f1',
-        color: '#111111',
-        border: '1px solid #d5d5d5',
-        borderRadius: '6px',
-        outline: 'none',
-        fontWeight: '500',
-        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.04)'
-
-    });
-
-
-    overlay.find('.est-hour, .est-minute').on('focus', function() {
-
-        $(this).css({
-
-            background: '#ffffff',
-            border: '2px solid #222222'
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.48)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 99999,
+            backdropFilter: 'blur(2px)'
 
         });
 
-    });
 
+        // =================================================
+        // DIALOG DESIGN
+        // =================================================
 
-    overlay.find('.est-hour, .est-minute').on('blur', function() {
+        dialog.css({
 
-        $(this).css({
-
-            background: '#f1f1f1',
-            border: '1px solid #d5d5d5'
-
-        });
-
-    });
-
-
-    overlay.find('.est-time-colon').css({
-
-        fontSize: '28px',
-        fontWeight: 'bold'
-
-    });
-
-
-    // =================================================
-    // AM / PM DESIGN
-    // =================================================
-
-    overlay.find('.est-period').css({
-
-        display: 'flex',
-        flexDirection: 'column',
-        marginLeft: '5px',
-        gap: '2px'
-
-    });
-
-
-    overlay.find('.est-period button').css({
-
-        width: '43px',
-        height: '26px',
-        background: '#ffffff',
-        color: '#111111',
-        border: '1px solid #cccccc',
-        fontSize: '12px',
-        cursor: 'pointer',
-        transition: 'all 0.15s'
-
-    });
-
-
-    const update_period = () => {
-
-        overlay.find('.est-am, .est-pm').css({
-
+            width: '360px',
+            maxWidth: '95vw',
             background: '#ffffff',
             color: '#111111',
-            fontWeight: 'normal'
+            padding: '22px',
+            border: '1px solid #dddddd',
+            borderRadius: '12px',
+            boxShadow: '0 12px 40px rgba(0,0,0,0.22)'
 
         });
-
-        overlay.find('.est-' + period.toLowerCase()).css({
-
-            background: '#222222',
-            color: '#ffffff',
-            fontWeight: 'bold'
-
-        });
-
-    };
-
-
-    update_period();
-
-
-    // =================================================
-    // CLOCK DESIGN
-    // =================================================
-
-    overlay.find('.est-clock').css({
-
-        width: '220px',
-        height: '220px',
-        maxWidth: '100%',
-        aspectRatio: '1',
-        position: 'relative',
-        margin: 'auto',
-        borderRadius: '50%',
-        background: '#f1f1f1',
-        border: '1px solid #d0d0d0',
-        boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.04)'
-
-    });
-
-
-    // =================================================
-    // RENDER HOUR / MINUTE CLOCK
-    // =================================================
-
-    const render_clock = () => {
-
-        const is_hour = selection_mode === 'hour';
-
-        overlay.find('.est-time-title').text(
-
-            is_hour ? 'SELECT HOUR' : 'SELECT MINUTE'
-
-        );
-
-
-        const numbers = Array.from({ length: 12 }, (_, i) => {
-
-            const value = is_hour
-                ? (i === 0 ? 12 : i)
-                : i * 5;
-
-            const angle = (i * 30 - 90) * Math.PI / 180;
-
-            const left = 50 + 40 * Math.cos(angle);
-
-            const top = 50 + 40 * Math.sin(angle);
-
-
-            const selected = is_hour
-                ? hour === value
-                : minute === value;
-
-
-            const display_value = is_hour
-                ? value
-                : String(value).padStart(2, '0');
-
-
-            return `
-
-                <button type="button"
-
-                    class="est-clock-number"
-
-                    data-value="${value}"
-
-                    style="
-
-                        position:absolute;
-
-                        left:${left}%;
-
-                        top:${top}%;
-
-                        transform:translate(-50%,-50%);
-
-                        width:34px;
-
-                        height:34px;
-
-                        border:none;
-
-                        border-radius:50%;
-
-                        background:${selected ? '#222222' : 'transparent'};
-
-                        color:${selected ? '#ffffff' : '#111111'};
-
-                        font-size:13px;
-
-                        font-weight:${selected ? 'bold' : 'normal'};
-
-                        cursor:pointer;
-
-                    ">
-
-                    ${display_value}
-
-                </button>
-
-            `;
-
-        });
-
-
-        overlay.find('.est-clock').html(
-
-            numbers.join('') +
-
-            `<div class="est-clock-center"></div>`
-
-        );
-
-
-        overlay.find('.est-clock-center').css({
-
-            position: 'absolute',
-            width: '7px',
-            height: '7px',
-            background: '#222222',
-            borderRadius: '50%',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)'
-
-        });
-
-    };
-
-
-    // Initial clock display
-    render_clock();
-
-
-    // =================================================
-    // SELECT HOUR / MINUTE FROM CLOCK
-    // =================================================
-
-    overlay.on('click', '.est-clock-number', function() {
-
-        const value = parseInt($(this).attr('data-value'), 10);
-
-
-        if (selection_mode === 'hour') {
-
-            // Set selected hour
-            hour = value;
-
-            overlay.find('.est-hour').val(
-
-                String(hour).padStart(2, '0')
-
-            );
-
-
-            // Automatically switch to minute clock
-            selection_mode = 'minute';
-
-            render_clock();
-
-
-        } else {
-
-            // Set selected minute
-            minute = value;
-
-            overlay.find('.est-minute').val(
-
-                String(minute).padStart(2, '0')
-
-            );
-
-
-            // Keep minute clock visible
-            selection_mode = 'minute';
-
-            render_clock();
-
-        }
-
-    });
-
-
-    // =================================================
-    // CLICK HOUR INPUT TO SHOW HOUR CLOCK
-    // =================================================
-
-    overlay.on('click', '.est-hour', function() {
-
-        selection_mode = 'hour';
-
-        render_clock();
-
-    });
-
-
-    // =================================================
-    // CLICK MINUTE INPUT TO SHOW MINUTE CLOCK
-    // =================================================
-
-    overlay.on('click', '.est-minute', function() {
-
-        selection_mode = 'minute';
-
-        render_clock();
-
-    });
-
-
-    // =================================================
-    // MANUAL HOUR ENTRY
-    // =================================================
-
-    overlay.on('input', '.est-hour', function() {
-
-        const value = parseInt($(this).val(), 10);
-
-        if (Number.isInteger(value)) {
-
-            hour = value;
-
-        }
-
-    });
-
-
-    // =================================================
-    // MANUAL MINUTE ENTRY
-    // =================================================
-
-    overlay.on('input', '.est-minute', function() {
-
-        const value = parseInt($(this).val(), 10);
-
-        if (Number.isInteger(value)) {
-
-            minute = value;
-
-        }
-
-    });
-
-
-    // =================================================
-    // AM / PM SELECTION
-    // =================================================
-
-    overlay.on('click', '.est-am', function() {
-
-        period = 'AM';
-
-        update_period();
-
-    });
-
-
-    overlay.on('click', '.est-pm', function() {
-
-        period = 'PM';
-
-        update_period();
-
-    });
-
-
-    // =================================================
-    // CANCEL BUTTON
-    // =================================================
-
-    overlay.on('click', '.est-cancel', function() {
-
-        overlay.remove();
-
-    });
-
-
-    // =================================================
-    // OK / SAVE BUTTON
-    // =================================================
-
-    overlay.on('click', '.est-ok', function() {
-
-        hour = parseInt(overlay.find('.est-hour').val(), 10);
-
-        minute = parseInt(overlay.find('.est-minute').val(), 10);
-
-
-        // Validate time
-        if (
-
-            !Number.isInteger(hour) ||
-
-            hour < 1 ||
-
-            hour > 12 ||
-
-            !Number.isInteger(minute) ||
-
-            minute < 0 ||
-
-            minute > 59
-
-        ) {
-
-            frappe.msgprint({
-
-                title: 'Invalid Time',
-
-                message: 'Please enter a valid hour (1–12) and minute (0–59).',
-
-                indicator: 'orange'
-
-            });
-
-            return;
-
-        }
-
-
-        // Convert 12-hour format to 24-hour format
-        let hour24 = hour % 12;
-
-        if (period === 'PM') {
-
-            hour24 += 12;
-
-        }
-
-
-        const time24 =
-
-            String(hour24).padStart(2, '0') +
-
-            ':' +
-
-            String(minute).padStart(2, '0');
-
-
-        // Save IN / OUT time
-        set_est_time(
-
-            $btn.closest('.est-row'),
-
-            type,
-
-            time24
-
-        );
-
-
-        // Close clock
-        overlay.remove();
 
 
         // =================================================
-        // RECALCULATE TOTAL HOURS
+        // TITLE DESIGN
         // =================================================
 
-        const row = $btn.closest('.est-row');
+        overlay.find('.est-time-title').css({
 
-        const total = calculate_total(
+            fontSize: '11px',
+            color: '#777777',
+            marginBottom: '15px',
+            letterSpacing: '1px',
+            fontWeight: 'bold',
+            textAlign: 'center'
 
-            row.find('.est-in').val(),
-
-            row.find('.est-out').val(),
-
-            row.find('.est-break').val()
-
-        );
-
-
-        row.find('.est-total-value').text(
-
-            format_hours(total)
-
-        );
+        });
 
 
-        // Refresh summary cards
-        update_summary();
+        // =================================================
+        // TIME DISPLAY DESIGN
+        // =================================================
 
-    });
+        overlay.find('.est-time-display').css({
 
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '7px',
+            marginBottom: '22px'
 
-    // =================================================
-    // BUTTON HOVER EFFECTS
-    // =================================================
-
-    overlay.find('.est-time-actions').css({
-
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        gap: '10px',
-        marginTop: '24px',
-        paddingTop: '15px',
-        borderTop: '1px solid #eeeeee'
-
-    });
+        });
 
 
-    // CANCEL BUTTON DESIGN
-    overlay.find('.est-cancel').css({
+        overlay.find('.est-hour, .est-minute').css({
 
-        background: '#ffffff',
-        color: '#555555',
-        border: '1px solid #d5d5d5',
-        borderRadius: '7px',
-        padding: '9px 18px',
-        fontSize: '12px',
-        fontWeight: '600',
-        letterSpacing: '0.4px',
-        cursor: 'pointer',
-        transition: 'all 0.2s'
+            width: '65px',
+            height: '52px',
+            fontSize: '27px',
+            textAlign: 'center',
+            background: '#f1f1f1',
+            color: '#111111',
+            border: '1px solid #d5d5d5',
+            borderRadius: '6px',
+            outline: 'none',
+            fontWeight: '500',
+            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.04)'
 
-    });
-
-
-    // OK BUTTON DESIGN
-    overlay.find('.est-ok').css({
-
-        background: '#222222',
-        color: '#ffffff',
-        border: '1px solid #222222',
-        borderRadius: '7px',
-        padding: '9px 22px',
-        fontSize: '12px',
-        fontWeight: '600',
-        letterSpacing: '0.4px',
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.15)'
-
-    });
+        });
 
 
-    // CANCEL HOVER
-    overlay.find('.est-cancel').hover(
-
-        function() {
-
-            $(this).css({
-
-                background: '#f1f1f1',
-                borderColor: '#aaaaaa'
-
-            });
-
-        },
-
-        function() {
+        overlay.find('.est-hour, .est-minute').on('focus', function() {
 
             $(this).css({
 
                 background: '#ffffff',
-                borderColor: '#d5d5d5'
+                border: '2px solid #222222'
 
             });
 
-        }
-
-    );
+        });
 
 
-    // OK HOVER
-    overlay.find('.est-ok').hover(
-
-        function() {
+        overlay.find('.est-hour, .est-minute').on('blur', function() {
 
             $(this).css({
 
-                background: '#444444',
-                borderColor: '#444444'
+                background: '#f1f1f1',
+                border: '1px solid #d5d5d5'
 
             });
 
-        },
+        });
 
-        function() {
 
-            $(this).css({
+        overlay.find('.est-time-colon').css({
+
+            fontSize: '28px',
+            fontWeight: 'bold'
+
+        });
+
+
+        // =================================================
+        // AM / PM DESIGN
+        // =================================================
+
+        overlay.find('.est-period').css({
+
+            display: is_break ? 'none' : 'flex',
+            flexDirection: 'column',
+            marginLeft: '5px',
+            gap: '2px'
+
+        });
+
+
+        overlay.find('.est-period button').css({
+
+            width: '43px',
+            height: '26px',
+            background: '#ffffff',
+            color: '#111111',
+            border: '1px solid #cccccc',
+            fontSize: '12px',
+            cursor: 'pointer',
+            transition: 'all 0.15s'
+
+        });
+
+
+        const update_period = () => {
+
+            overlay.find('.est-am, .est-pm').css({
+
+                background: '#ffffff',
+                color: '#111111',
+                fontWeight: 'normal'
+
+            });
+
+            overlay.find('.est-' + period.toLowerCase()).css({
 
                 background: '#222222',
-                borderColor: '#222222'
+                color: '#ffffff',
+                fontWeight: 'bold'
 
             });
 
-        }
-
-    );
-
-}
+        };
 
 
-// =====================================================
-// BIND IN / OUT CLOCK BUTTONS
-// =====================================================
-
-$(wrapper).off('click.estclock', '.est-time-picker-btn');
-
-$(wrapper).on('click.estclock', '.est-time-picker-btn', function() {
-
-    const button = $(this);
-
-    const row = button.closest('.est-row');
-
-    const type = button.attr('data-time-type');
-
-    const input = row.find('.est-' + type);
-
-    open_est_time_picker(input, button, type);
-
-});
+        update_period();
 
 
+        // =================================================
+        // CLOCK DESIGN
+        // =================================================
+
+        overlay.find('.est-clock').css({
+
+            width: '220px',
+            height: '220px',
+            maxWidth: '100%',
+            aspectRatio: '1',
+            position: 'relative',
+            margin: 'auto',
+            borderRadius: '50%',
+            background: '#f1f1f1',
+            border: '1px solid #d0d0d0',
+            boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.04)'
+
+        });
+
+
+        // =================================================
+        // RENDER HOUR / MINUTE CLOCK
+        // =================================================
+
+        // const render_clock = () => {
+
+        //     const is_hour = selection_mode === 'hour';
+
+        //     overlay.find('.est-time-title').text(
+
+        //         is_hour ? 'SELECT HOUR' : 'SELECT MINUTE'
+
+        //     );
+
+
+        //     const numbers = Array.from({ length: 12 }, (_, i) => {
+
+        //         const value = is_hour
+        //             ? (i === 0 ? 12 : i)
+        //             : i * 5;
+
+        //         const angle = (i * 30 - 90) * Math.PI / 180;
+
+        //         const left = 50 + 40 * Math.cos(angle);
+
+        //         const top = 50 + 40 * Math.sin(angle);
+
+
+        //         const selected = is_hour
+        //             ? hour === value
+        //             : minute === value;
+
+
+        //         const display_value = is_hour
+        //             ? value
+        //             : String(value).padStart(2, '0');
+
+
+        //         return `
+
+        //             <button type="button"
+
+        //                 class="est-clock-number"
+
+        //                 data-value="${value}"
+
+        //                 style="
+
+        //                     position:absolute;
+
+        //                     left:${left}%;
+
+        //                     top:${top}%;
+
+        //                     transform:translate(-50%,-50%);
+
+        //                     width:34px;
+
+        //                     height:34px;
+
+        //                     border:none;
+
+        //                     border-radius:50%;
+
+        //                     background:${selected ? '#222222' : 'transparent'};
+
+        //                     color:${selected ? '#ffffff' : '#111111'};
+
+        //                     font-size:13px;
+
+        //                     font-weight:${selected ? 'bold' : 'normal'};
+
+        //                     cursor:pointer;
+
+        //                 ">
+
+        //                 ${display_value}
+
+        //             </button>
+
+        //         `;
+
+        //     });
+
+
+        //     overlay.find('.est-clock').html(
+
+        //         numbers.join('') +
+
+        //         `<div class="est-clock-center"></div>`
+
+        //     );
+
+
+        //     overlay.find('.est-clock-center').css({
+
+        //         position: 'absolute',
+        //         width: '7px',
+        //         height: '7px',
+        //         background: '#222222',
+        //         borderRadius: '50%',
+        //         left: '50%',
+        //         top: '50%',
+        //         transform: 'translate(-50%, -50%)'
+
+        //     });
+
+        // };
 
 
 
 
+        const render_clock = () => {
+
+            const is_hour = selection_mode === 'hour';
+
+            overlay.find('.est-time-title').text(
+                is_hour ? 'SELECT HOUR' : 'SELECT MINUTE'
+            );
+
+            let numbers = [];
+
+            const count = is_hour ?
+                (is_break ? 24 : 12) :
+                12;
+
+            for (let i = 0; i < count; i++) {
+
+                const value = is_hour ?
+                    (is_break ? i : (i === 0 ? 12 : i)) :
+                    i * 5;
+
+                const angle = ((is_break && is_hour ? i % 12 : i) * 30 - 90) * Math.PI / 180;
+
+                const radius = is_break && is_hour ?
+                    (i < 12 ? 41 : 26) :
+                    40;
+
+                const left = 50 + radius * Math.cos(angle);
+                const top = 50 + radius * Math.sin(angle);
+
+                const selected = is_hour ?
+                    hour === value :
+                    minute === value;
+
+                const display_value = is_hour ?
+                    String(value).padStart(2, '0') :
+                    String(value).padStart(2, '0');
+
+                const btn_size = (is_break && is_hour && i >= 12) ? 26 : 30;
+
+                numbers.push(`
+            <button type="button"
+                class="est-clock-number"
+                data-value="${value}"
+                style="
+                    position:absolute;
+                    left:${left}%;
+                    top:${top}%;
+                    transform:translate(-50%,-50%);
+                    width:${btn_size}px;
+                    height:${btn_size}px;
+                    border:none;
+                    border-radius:50%;
+                    background:${selected ? '#222222' : 'transparent'};
+                    color:${selected ? '#ffffff' : '#111111'};
+                    font-size:12px;
+                    font-weight:${selected ? 'bold' : 'normal'};
+                    cursor:pointer;
+                ">
+                ${display_value}
+            </button>
+        `);
+            }
+
+            overlay.find('.est-clock').html(
+                numbers.join('') +
+                `<div class="est-clock-center"></div>`
+            );
+
+            overlay.find('.est-clock-center').css({
+                position: 'absolute',
+                width: '7px',
+                height: '7px',
+                background: '#222222',
+                borderRadius: '50%',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)'
+            });
+        };
 
 
 
+
+        // Initial clock display
+        render_clock();
+
+
+        // =================================================
+        // SELECT HOUR / MINUTE FROM CLOCK
+        // =================================================
+
+        overlay.on('click', '.est-clock-number', function() {
+
+            const value = parseInt($(this).attr('data-value'), 10);
+
+
+            if (selection_mode === 'hour') {
+
+                // Set selected hour
+                hour = value;
+
+                overlay.find('.est-hour').val(
+
+                    String(hour).padStart(2, '0')
+
+                );
+
+
+                // Automatically switch to minute clock
+                selection_mode = 'minute';
+
+                render_clock();
+
+
+            } else {
+
+                // Set selected minute
+                minute = value;
+
+                overlay.find('.est-minute').val(
+
+                    String(minute).padStart(2, '0')
+
+                );
+
+
+                // Keep minute clock visible
+                selection_mode = 'minute';
+
+                render_clock();
+
+            }
+
+        });
+
+
+        // =================================================
+        // CLICK HOUR INPUT TO SHOW HOUR CLOCK
+        // =================================================
+
+        overlay.on('click', '.est-hour', function() {
+
+            selection_mode = 'hour';
+
+            render_clock();
+
+        });
+
+
+        // =================================================
+        // CLICK MINUTE INPUT TO SHOW MINUTE CLOCK
+        // =================================================
+
+        overlay.on('click', '.est-minute', function() {
+
+            selection_mode = 'minute';
+
+            render_clock();
+
+        });
+
+
+        // =================================================
+        // MANUAL HOUR ENTRY
+        // =================================================
+
+        overlay.on('input', '.est-hour', function() {
+
+            const value = parseInt($(this).val(), 10);
+
+            if (Number.isInteger(value)) {
+
+                hour = value;
+
+            }
+
+        });
+
+
+        // =================================================
+        // MANUAL MINUTE ENTRY
+        // =================================================
+
+        overlay.on('input', '.est-minute', function() {
+
+            const value = parseInt($(this).val(), 10);
+
+            if (Number.isInteger(value)) {
+
+                minute = value;
+
+            }
+
+        });
+
+
+        // =================================================
+        // AM / PM SELECTION
+        // =================================================
+
+        overlay.on('click', '.est-am', function() {
+
+            period = 'AM';
+
+            update_period();
+
+        });
+
+
+        overlay.on('click', '.est-pm', function() {
+
+            period = 'PM';
+
+            update_period();
+
+        });
+
+
+        // =================================================
+        // CANCEL BUTTON
+        // =================================================
+
+        overlay.on('click', '.est-cancel', function() {
+
+            overlay.remove();
+
+        });
+
+
+        // =================================================
+        // OK / SAVE BUTTON
+        // =================================================
+
+        overlay.on('click', '.est-ok', function() {
+
+
+
+
+            hour = parseInt(overlay.find('.est-hour').val(), 10);
+
+            minute = parseInt(overlay.find('.est-minute').val(), 10);
+
+            // Validate time
+            const valid_hour = is_break ?
+                (hour >= 0 && hour <= 23) :
+                (hour >= 1 && hour <= 12);
+
+            if (
+                !Number.isInteger(hour) ||
+                !valid_hour ||
+                !Number.isInteger(minute) ||
+                minute < 0 ||
+                minute > 59
+            ) {
+                frappe.msgprint({
+                    title: 'Invalid Time',
+                    message: is_break ?
+                        'Enter a valid hour (00–23) and minute (00–59).' :
+                        'Enter a valid hour (1–12) and minute (0–59).',
+                    indicator: 'orange'
+                });
+
+                return;
+            }
+
+            // Convert to 24-hour format
+            let hour24;
+
+            if (is_break) {
+                hour24 = hour;
+            } else {
+                hour24 = hour % 12;
+
+                if (period === 'PM') {
+                    hour24 += 12;
+                }
+            }
+
+            const time24 =
+                String(hour24).padStart(2, '0') +
+                ':' +
+                String(minute).padStart(2, '0');
+
+            // Save IN / OUT / BREAK time
+            set_est_time(
+                $btn.closest('.est-row'),
+                type,
+                time24
+            );
+
+
+
+
+            // hour = parseInt(overlay.find('.est-hour').val(), 10);
+
+            // minute = parseInt(overlay.find('.est-minute').val(), 10);
+
+
+            // // Validate time
+            // if (
+
+            //     !Number.isInteger(hour) ||
+
+            //     hour < 1 ||
+
+            //     hour > 12 ||
+
+            //     !Number.isInteger(minute) ||
+
+            //     minute < 0 ||
+
+            //     minute > 59
+
+            // ) {
+
+            //     frappe.msgprint({
+
+            //         title: 'Invalid Time',
+
+            //         message: 'Please enter a valid hour (1–12) and minute (0–59).',
+
+            //         indicator: 'orange'
+
+            //     });
+
+            //     return;
+
+            // }
+
+
+            // // Convert 12-hour format to 24-hour format
+            // let hour24 = hour % 12;
+
+            // if (period === 'PM') {
+
+            //     hour24 += 12;
+
+            // }
+
+
+            // const time24 =
+
+            //     String(hour24).padStart(2, '0') +
+
+            //     ':' +
+
+            //     String(minute).padStart(2, '0');
+
+
+            // // Save IN / OUT time
+            // set_est_time(
+
+            //     $btn.closest('.est-row'),
+
+            //     type,
+
+            //     time24
+
+            // );
+
+
+            // Close clock
+            overlay.remove();
+
+
+            // =================================================
+            // RECALCULATE TOTAL HOURS
+            // =================================================
+
+            const row = $btn.closest('.est-row');
+
+            const total = calculate_total(
+                row.find('.est-in').val(),
+                row.find('.est-out').val(),
+                row.find('.est-break').val()
+            );
+
+            row.find('.est-total-value').text(format_hours(total));
+
+
+            // Refresh summary cards
+            update_summary();
+
+        });
+
+
+        // =================================================
+        // BUTTON HOVER EFFECTS
+        // =================================================
+
+        overlay.find('.est-time-actions').css({
+
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: '10px',
+            marginTop: '24px',
+            paddingTop: '15px',
+            borderTop: '1px solid #eeeeee'
+
+        });
+
+
+        // CANCEL BUTTON DESIGN
+        overlay.find('.est-cancel').css({
+
+            background: '#ffffff',
+            color: '#555555',
+            border: '1px solid #d5d5d5',
+            borderRadius: '7px',
+            padding: '9px 18px',
+            fontSize: '12px',
+            fontWeight: '600',
+            letterSpacing: '0.4px',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+
+        });
+
+
+        // OK BUTTON DESIGN
+        overlay.find('.est-ok').css({
+
+            background: '#222222',
+            color: '#ffffff',
+            border: '1px solid #222222',
+            borderRadius: '7px',
+            padding: '9px 22px',
+            fontSize: '12px',
+            fontWeight: '600',
+            letterSpacing: '0.4px',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.15)'
+
+        });
+
+
+        // CANCEL HOVER
+        overlay.find('.est-cancel').hover(
+
+            function() {
+
+                $(this).css({
+
+                    background: '#f1f1f1',
+                    borderColor: '#aaaaaa'
+
+                });
+
+            },
+
+            function() {
+
+                $(this).css({
+
+                    background: '#ffffff',
+                    borderColor: '#d5d5d5'
+
+                });
+
+            }
+
+        );
+
+
+        // OK HOVER
+        overlay.find('.est-ok').hover(
+
+            function() {
+
+                $(this).css({
+
+                    background: '#444444',
+                    borderColor: '#444444'
+
+                });
+
+            },
+
+            function() {
+
+                $(this).css({
+
+                    background: '#222222',
+                    borderColor: '#222222'
+
+                });
+
+            }
+
+        );
+
+    }
+
+
+    // =====================================================
+    // BIND IN / OUT CLOCK BUTTONS
+    // =====================================================
+
+    $(wrapper).off('click.estclock', '.est-time-picker-btn');
+
+    $(wrapper).on('click.estclock', '.est-time-picker-btn', function() {
+
+        const button = $(this);
+
+        const row = button.closest('.est-row');
+
+        const type = button.attr('data-time-type');
+
+        const input = row.find('.est-' + type);
+
+        open_est_time_picker(input, button, type);
+
+    });
 
 
 
@@ -2337,186 +2478,412 @@ $(wrapper).on('click.estclock', '.est-time-picker-btn', function() {
 
 
 
+    // =====================================================
+    // SECTION 20: SUBMIT TIME SHEET
+    // =====================================================
 
+    $(page.body).on('click', '#est-submit-timesheet', async function() {
 
+        const button = $(this);
 
+        const selected_site = $('#est-site').val();
 
+        const selected_date = $('#est-date').val();
 
+        if (!selected_site) {
 
-// =====================================================
-// SECTION 20: SUBMIT TIME SHEET
-// =====================================================
+            frappe.msgprint({
+                title: 'Site Required',
+                message: 'Please select a Site before submitting the Time Sheet.',
+                indicator: 'orange'
+            });
 
-$(page.body).on('click', '#est-submit-timesheet', async function() {
+            return;
+        }
 
-    const button = $(this);
+        const rows = $('.est-row');
 
-    const selected_site = $('#est-site').val();
+        if (!rows.length) {
 
-	const selected_date = $('#est-date').val();
+            frappe.msgprint('No employee rows available to submit.');
 
-    if (!selected_site) {
+            return;
+        }
 
-        frappe.msgprint({
-            title: 'Site Required',
-            message: 'Please select a Site before submitting the Time Sheet.',
-            indicator: 'orange'
+        // Confirmation
+        const confirmed = await new Promise(resolve => {
+
+            frappe.confirm(
+                `Create Site TimeSheet records for ${rows.length} employees at ${selected_site}?`,
+                () => resolve(true),
+                () => resolve(false)
+            );
+
         });
 
-        return;
-    }
+        if (!confirmed) return;
 
-    const rows = $('.est-row');
+        button.prop('disabled', true);
 
-    if (!rows.length) {
+        const original_html = button.html();
 
-        frappe.msgprint('No employee rows available to submit.');
-
-        return;
-    }
-
-    // Confirmation
-    const confirmed = await new Promise(resolve => {
-
-        frappe.confirm(
-            `Create Site TimeSheet records for ${rows.length} employees at ${selected_site}?`,
-            () => resolve(true),
-            () => resolve(false)
+        button.html(
+            '<i class="fa fa-spinner fa-spin"></i> Submitting...'
         );
 
-    });
+        let created = 0;
 
-    if (!confirmed) return;
+        const errors = [];
 
-    button.prop('disabled', true);
+        try {
 
-    const original_html = button.html();
+            for (const element of rows.toArray()) {
 
-    button.html(
-        '<i class="fa fa-spinner fa-spin"></i> Submitting...'
-    );
+                const row = $(element);
 
-    let created = 0;
+                const employee_id = row.attr('data-employee');
 
-    const errors = [];
+                const trade = row.find('.est-trade-value').text().trim();
 
-    try {
+                const civil_id = row.find('.est-civil-id-value').text().trim();
 
-        for (const element of rows.toArray()) {
+                const in_time = row.find('.est-in').val() || null;
 
-            const row = $(element);
+                const out_time = row.find('.est-out').val() || null;
 
-            const employee_id = row.attr('data-employee');
+                // Check whether at least one time is entered
+                if (!in_time && !out_time) {
 
-            const trade = row.find('.est-trade-value').text().trim();
+                    errors.push(
+                        `${employee_id}: Please enter IN or OUT time.`
+                    );
 
-            const civil_id = row.find('.est-civil-id-value').text().trim();
+                    continue;
 
-            // Site TimeSheet Document
-            const doc = {
+                }
 
-                doctype: 'Site TimeSheet',
+                // Common Site TimeSheet fields
+                const common_doc = {
 
+                    doctype: 'Site TimeSheet',
 
-				custom_date: selected_date,
+                    custom_date: selected_date,
 
-                custom_emp_name: employee_id,
+                    custom_emp_name: employee_id,
 
-                custom_trade: trade === '-' ? '' : trade,
+                    custom_trade: trade === '-' ? '' : trade,
 
-                custom_civil_id: civil_id === '-' ? '' : civil_id,
+                    custom_civil_id: civil_id === '-' ? '' : civil_id,
 
-                custom_attendance: row.find('.est-attendance').val(),
+                    custom_attendance: row.find('.est-attendance').val(),
 
-                custom_in_time: row.find('.est-in').val() || null,
+                    custom_current_site: selected_site
 
-                custom_out_time: row.find('.est-out').val() || null,
+                };
 
-                custom_total_hrs: row.find('.est-total-value').text().trim(),
+                try {
 
-                custom_break_hrs: row.find('.est-break').val() || '0',
+                    // Create separate IN record
+                    if (in_time) {
 
-                custom_normal_hrs: row.find('.est-normal-value').text().trim(),
+                        const in_doc = {
 
-                custom_current_site: selected_site
+                            ...common_doc,
 
-            };
+                            custom_log_type: 'IN',
 
-            try {
+                            custom_in_time: in_time,
 
-                await frappe.db.insert(doc);
+                            custom_out_time: null,
 
-                created++;
+                            custom_total_hrs: 0,
 
-            } catch (row_error) {
+                            custom_rest_hrs: null,
 
-                console.error(
-                    'Site TimeSheet creation failed for',
-                    employee_id,
-                    row_error
-                );
+                            custom_normal_hrs: 0
 
-                errors.push(
-                    `${employee_id}: ${row_error.message || 'Unknown error'}`
-                );
+                        };
+
+                        await frappe.db.insert(in_doc);
+
+                        created++;
+
+                    }
+
+                    // Create separate OUT record
+                    if (out_time) {
+
+                        const out_doc = {
+
+                            ...common_doc,
+
+                            custom_log_type: 'OUT',
+
+                            custom_in_time: null,
+
+                            custom_out_time: out_time,
+
+                            custom_total_hrs: row.find('.est-total-value').text().trim(),
+
+                            custom_rest_hrs: row.find('.est-break').val() || null,
+
+                            custom_normal_hrs: row.find('.est-normal-value').text().trim()
+
+                        };
+
+                        await frappe.db.insert(out_doc);
+
+                        created++;
+
+                    }
+
+                } catch (row_error) {
+
+                    console.error(
+                        'Site TimeSheet creation failed for',
+                        employee_id,
+                        row_error
+                    );
+
+                    errors.push(
+                        `${employee_id}: ${row_error.message || 'Unknown error'}`
+                    );
+
+                }
 
             }
 
-        }
+            if (errors.length) {
 
-        if (errors.length) {
+                frappe.msgprint({
 
-            frappe.msgprint({
+                    title: 'Time Sheet Submission Completed with Errors',
 
-                title: 'Time Sheet Submission Completed with Errors',
+                    indicator: 'orange',
 
-                indicator: 'orange',
-
-                message: `${created} record(s) created successfully.
+                    message: `${created} record(s) created successfully.
                     <br><br>
                     Failed records:
                     <br>
                     ${errors.map(escape_html).join('<br>')}`
 
-            });
+                });
 
-        } else {
+            } else {
+
+                frappe.msgprint({
+
+                    title: 'Time Sheet Submitted',
+
+                    indicator: 'green',
+
+                    message: `${created} Site TimeSheet record(s) created successfully for ${escape_html(selected_site)}.`
+
+                });
+
+            }
+
+        } catch (error) {
+
+            console.error('Time Sheet Submission Error:', error);
 
             frappe.msgprint({
 
-                title: 'Time Sheet Submitted',
+                title: 'Submission Error',
 
-                indicator: 'green',
+                message: error.message || 'Unable to create Site TimeSheet records.',
 
-                message: `${created} Site TimeSheet record(s) created successfully for ${escape_html(selected_site)}.`
+                indicator: 'red'
 
             });
 
+        } finally {
+
+            button.prop('disabled', false);
+
+            button.html(original_html);
+
         }
 
-    } catch (error) {
+    });
 
-        console.error('Time Sheet Submission Error:', error);
 
-        frappe.msgprint({
 
-            title: 'Submission Error',
 
-            message: error.message || 'Unable to create Site TimeSheet records.',
+    // // =====================================================
+    // // SECTION 20: SUBMIT TIME SHEET
+    // // =====================================================
 
-            indicator: 'red'
+    // $(page.body).on('click', '#est-submit-timesheet', async function() {
 
-        });
+    //     const button = $(this);
 
-    } finally {
+    //     const selected_site = $('#est-site').val();
 
-        button.prop('disabled', false);
+    // 	const selected_date = $('#est-date').val();
 
-        button.html(original_html);
+    //     if (!selected_site) {
 
-    }
+    //         frappe.msgprint({
+    //             title: 'Site Required',
+    //             message: 'Please select a Site before submitting the Time Sheet.',
+    //             indicator: 'orange'
+    //         });
 
-});
+    //         return;
+    //     }
+
+    //     const rows = $('.est-row');
+
+    //     if (!rows.length) {
+
+    //         frappe.msgprint('No employee rows available to submit.');
+
+    //         return;
+    //     }
+
+    //     // Confirmation
+    //     const confirmed = await new Promise(resolve => {
+
+    //         frappe.confirm(
+    //             `Create Site TimeSheet records for ${rows.length} employees at ${selected_site}?`,
+    //             () => resolve(true),
+    //             () => resolve(false)
+    //         );
+
+    //     });
+
+    //     if (!confirmed) return;
+
+    //     button.prop('disabled', true);
+
+    //     const original_html = button.html();
+
+    //     button.html(
+    //         '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+    //     );
+
+    //     let created = 0;
+
+    //     const errors = [];
+
+    //     try {
+
+    //         for (const element of rows.toArray()) {
+
+    //             const row = $(element);
+
+    //             const employee_id = row.attr('data-employee');
+
+    //             const trade = row.find('.est-trade-value').text().trim();
+
+    //             const civil_id = row.find('.est-civil-id-value').text().trim();
+
+    //             // Site TimeSheet Document
+    //             const doc = {
+
+    //                 doctype: 'Site TimeSheet',
+
+
+    // 				custom_date: selected_date,
+
+    //                 custom_emp_name: employee_id,
+
+    //                 custom_trade: trade === '-' ? '' : trade,
+
+    //                 custom_civil_id: civil_id === '-' ? '' : civil_id,
+
+    //                 custom_attendance: row.find('.est-attendance').val(),
+
+    //                 custom_in_time: row.find('.est-in').val() || null,
+
+    //                 custom_out_time: row.find('.est-out').val() || null,
+
+    //                 custom_total_hrs: row.find('.est-total-value').text().trim(),
+
+    //                 custom_break_hrs: row.find('.est-break').val() || '0',
+
+    //                 custom_normal_hrs: row.find('.est-normal-value').text().trim(),
+
+    //                 custom_current_site: selected_site
+
+    //             };
+
+    //             try {
+
+    //                 await frappe.db.insert(doc);
+
+    //                 created++;
+
+    //             } catch (row_error) {
+
+    //                 console.error(
+    //                     'Site TimeSheet creation failed for',
+    //                     employee_id,
+    //                     row_error
+    //                 );
+
+    //                 errors.push(
+    //                     `${employee_id}: ${row_error.message || 'Unknown error'}`
+    //                 );
+
+    //             }
+
+    //         }
+
+    //         if (errors.length) {
+
+    //             frappe.msgprint({
+
+    //                 title: 'Time Sheet Submission Completed with Errors',
+
+    //                 indicator: 'orange',
+
+    //                 message: `${created} record(s) created successfully.
+    //                     <br><br>
+    //                     Failed records:
+    //                     <br>
+    //                     ${errors.map(escape_html).join('<br>')}`
+
+    //             });
+
+    //         } else {
+
+    //             frappe.msgprint({
+
+    //                 title: 'Time Sheet Submitted',
+
+    //                 indicator: 'green',
+
+    //                 message: `${created} Site TimeSheet record(s) created successfully for ${escape_html(selected_site)}.`
+
+    //             });
+
+    //         }
+
+    //     } catch (error) {
+
+    //         console.error('Time Sheet Submission Error:', error);
+
+    //         frappe.msgprint({
+
+    //             title: 'Submission Error',
+
+    //             message: error.message || 'Unable to create Site TimeSheet records.',
+
+    //             indicator: 'red'
+
+    //         });
+
+    //     } finally {
+
+    //         button.prop('disabled', false);
+
+    //         button.html(original_html);
+
+    //     }
+
+    // });
 
 
 
@@ -2535,8 +2902,3 @@ $(page.body).on('click', '#est-submit-timesheet', async function() {
     initialize_page();
 
 };
-
-
-
-
-
