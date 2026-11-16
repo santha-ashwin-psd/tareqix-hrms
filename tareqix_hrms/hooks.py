@@ -284,16 +284,52 @@ app_license = "mit"
 # Custom fields owned by this app (module = "Tareqix Hrms"); imported on install and bench migrate.
 
 
+#fixtures = [
+ #   {"dt": "Custom Field", "filters": [["module", "=", "Tareqix Hrms"]]},
+  #  {"dt": "Print Format", "filters": [["name", "in", ["Monthly Attendance Sheet - Sign-off", "Salary Slip - Tareqix"]]]},
+#]
+
+
+
+
+
+
+
 fixtures = [
-    {"dt": "Custom Field", "filters": [["module", "=", "Tareqix Hrms"]]},
-    {"dt": "Print Format", "filters": [["name", "in", ["Monthly Attendance Sheet - Sign-off", "Salary Slip - Tareqix"]]]},
+    # Custom Fields
+    {
+        "dt": "Custom Field",
+        "filters": [["module", "=", "Tareqix Hrms"]]
+    },
+
+    # Property Setters (field placement and properties)
+    {
+        "dt": "Property Setter"
+    },
+
+    # Client Scripts
+    {
+        "dt": "Client Script",
+        "filters": [["module", "=", "Tareqix Hrms"]]
+    },
+
+    # Server Scripts
+    {
+        "dt": "Server Script",
+        "filters": [["module", "=", "Tareqix Hrms"]]
+    },
+
+    # Print Formats
+    {
+        "dt": "Print Format",
+        "filters": [
+            ["name", "in", [
+                "Monthly Attendance Sheet - Sign-off",
+                "Salary Slip - Tareqix"
+            ]]
+        ]
+    },
 ]
-
-
-
-
-
-
 
 
 # fixtures = [

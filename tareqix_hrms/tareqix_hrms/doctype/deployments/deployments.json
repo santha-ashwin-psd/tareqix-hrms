@@ -26,6 +26,7 @@
   {
    "fieldname": "custom_site",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Site"
   },
   {
@@ -38,6 +39,7 @@
    "fetch_from": "custom_employee_id.employee_name",
    "fieldname": "custom_employee_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Employee Name "
   },
   {
@@ -77,6 +79,7 @@
   {
    "fieldname": "custom_vendor",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Vendor",
    "options": "Supplier"
   }
@@ -84,7 +87,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-14 13:53:36.030614",
+ "modified": "2026-11-16 11:05:31.890451",
  "modified_by": "Administrator",
  "module": "Tareqix Hrms",
  "name": "Deployments",
