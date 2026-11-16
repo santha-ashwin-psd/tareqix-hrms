@@ -1,0 +1,129 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "SITETIME-.####",
+ "creation": "2026-11-14 12:21:53.805559",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_woyr",
+  "amended_from",
+  "custom_emp_name",
+  "custom_trade",
+  "custom_civil_id",
+  "custom_attendance",
+  "custom_in_time",
+  "custom_out_time",
+  "custom_total_hrs",
+  "custom_break_hrs",
+  "custom_normal_hrs",
+  "custom_current_site",
+  "custom_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_woyr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Site TimeSheet",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "custom_emp_name",
+   "fieldtype": "Link",
+   "label": "Employee Name",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "custom_trade",
+   "fieldtype": "Link",
+   "label": "Trade",
+   "options": "Designation"
+  },
+  {
+   "fetch_from": "custom_emp_name.civil_id",
+   "fieldname": "custom_civil_id",
+   "fieldtype": "Data",
+   "label": "Civil ID"
+  },
+  {
+   "fieldname": "custom_attendance",
+   "fieldtype": "Select",
+   "label": "Attendance ",
+   "options": "\nPresent\nAbsent\nHalf Day\nSick\nLeave"
+  },
+  {
+   "fieldname": "custom_in_time",
+   "fieldtype": "Time",
+   "label": "IN Time"
+  },
+  {
+   "fieldname": "custom_out_time",
+   "fieldtype": "Time",
+   "label": "OUT Time"
+  },
+  {
+   "fieldname": "custom_total_hrs",
+   "fieldtype": "Data",
+   "label": "Total Hrs"
+  },
+  {
+   "fieldname": "custom_break_hrs",
+   "fieldtype": "Data",
+   "label": "Break Hrs"
+  },
+  {
+   "fieldname": "custom_normal_hrs",
+   "fieldtype": "Data",
+   "label": "Normal Hrs"
+  },
+  {
+   "fieldname": "custom_current_site",
+   "fieldtype": "Data",
+   "label": "Current Site"
+  },
+  {
+   "fieldname": "custom_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-11-14 16:39:26.772948",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "Site TimeSheet",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

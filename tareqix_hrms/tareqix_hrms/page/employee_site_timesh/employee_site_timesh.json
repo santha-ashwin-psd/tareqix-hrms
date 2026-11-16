@@ -1,0 +1,28 @@
+{
+ "content": null,
+ "creation": "2026-11-14 11:29:04.967559",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-11-14 11:30:02.156036",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "employee-site-timesh",
+ "owner": "Administrator",
+ "page_name": "employee-site-timesh",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0
+}
