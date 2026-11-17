@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "creation": "2026-11-17 16:06:29.404741",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_3q1g",
+  "working_hours_column",
+  "custom_normal_hrs",
+  "custom_ramadan_hrs",
+  "custom_maximum_hours_per_day",
+  "custom_weekly_rest_days",
+  "column_break_jajl",
+  "custom_overtime_day",
+  "custom_overtime_night",
+  "custom_rest_day__holiday_premium",
+  "custom_days_for_hourly_rate",
+  "section_break_6wzr",
+  "heat_and_safety_column",
+  "custom_summer_midday_break",
+  "custom_absence_warning_after",
+  "custom_absconding_case_after",
+  "billing_and_end_of_service_column",
+  "custom_vat_",
+  "custom_gratuity",
+  "custom_expat_savings_system"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_3q1g",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Above this becomes overtime",
+   "fieldname": "custom_normal_hrs",
+   "fieldtype": "Int",
+   "label": "Normal Hours Per Day"
+  },
+  {
+   "description": "Muslim workers",
+   "fieldname": "custom_ramadan_hrs",
+   "fieldtype": "Int",
+   "label": "Ramadan Hours Per Day"
+  },
+  {
+   "description": "Including overtime",
+   "fieldname": "custom_maximum_hours_per_day",
+   "fieldtype": "Int",
+   "label": "Maximum Hours Per Day"
+  },
+  {
+   "description": "Two consecutive days",
+   "fieldname": "custom_weekly_rest_days",
+   "fieldtype": "Data",
+   "label": "Weekly Rest Days"
+  },
+  {
+   "description": "Outdoor sites, June to August\n",
+   "fieldname": "custom_summer_midday_break",
+   "fieldtype": "Data",
+   "label": "Summer Midday Break",
+   "options": "12:30\u201315:30"
+  },
+  {
+   "description": "Consecutive days",
+   "fieldname": "custom_absence_warning_after",
+   "fieldtype": "Int",
+   "label": "Absence warning after"
+  },
+  {
+   "description": "Consecutive days",
+   "fieldname": "custom_absconding_case_after",
+   "fieldtype": "Int",
+   "label": "Absconding case after"
+  },
+  {
+   "description": "Agreed overtime\n",
+   "fieldname": "custom_overtime_day",
+   "fieldtype": "Float",
+   "label": "Overtime, Day"
+  },
+  {
+   "description": "21:00 to 06:00",
+   "fieldname": "custom_overtime_night",
+   "fieldtype": "Float",
+   "label": "Overtime, Night"
+  },
+  {
+   "description": "On top of the day's pay",
+   "fieldname": "custom_rest_day__holiday_premium",
+   "fieldtype": "Float",
+   "label": "Rest Day / Holiday Premium"
+  },
+  {
+   "description": "Hourly = basic \u00f7 days \u00f7 hours",
+   "fieldname": "custom_days_for_hourly_rate",
+   "fieldtype": "Float",
+   "label": "Days for Hourly Rate"
+  },
+  {
+   "description": "On client and vendor invoices\n",
+   "fieldname": "custom_vat_",
+   "fieldtype": "Percent",
+   "label": "VAT %"
+  },
+  {
+   "description": "One month's basic per year, until the savings system starts",
+   "fieldname": "custom_gratuity",
+   "fieldtype": "Data",
+   "label": "Gratuity",
+   "options": "1 month / yr"
+  },
+  {
+   "description": "Employer 9% of basic, by 19 Jul 2027",
+   "fieldname": "custom_expat_savings_system",
+   "fieldtype": "Data",
+   "label": "Expat Savings System"
+  },
+  {
+   "description": "Multipliers of basic hourly wage\n",
+   "fieldname": "column_break_jajl",
+   "fieldtype": "Column Break",
+   "label": "Overtime and pay"
+  },
+  {
+   "fieldname": "section_break_6wzr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Royal Decree 53/2023, Art 70\u201371",
+   "fieldname": "working_hours_column",
+   "fieldtype": "Column Break",
+   "label": "Working hours"
+  },
+  {
+   "fieldname": "heat_and_safety_column",
+   "fieldtype": "Column Break",
+   "label": "Heat and safety"
+  },
+  {
+   "fieldname": "billing_and_end_of_service_column",
+   "fieldtype": "Column Break",
+   "label": "Billing and End of Service"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-11-17 16:59:47.181053",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "Oman Labour Rules",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

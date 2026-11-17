@@ -472,18 +472,7 @@ overlay.find('.est-ok').hover(
             <!-- STANDARD SHIFT INFORMATION -->
 
             <div class="est-standard-shift-row">
-
-                <div class="est-standard-shift-info">
-
-                    <div class="est-supplier-name" id="est-supplier-name">
-                        Loading Supplier...
-                    </div>
-
-                    <div class="est-shift-time" id="est-shift-time">
-                        Shift Time: --
-                    </div>
-
-                </div>
+            <div class="est-standard-shift-info" style="display:none;"></div>
 
                 <div class="est-standard-shift-actions">
 				<button class="est-apply-shift-btn" id="est-apply-shift">
@@ -512,24 +501,41 @@ overlay.find('.est-ok').hover(
 
                 <table class="est-table">
 
-                    <thead>
-                        <tr>
-                            <th style="min-width:240px;">Worker</th>
-                            <th>Trade</th>
-							<th>Civil ID</th>
-                            <th>Attendance</th>
-                            <th>IN</th>
-                            <th>OUT</th>
-                            <th>Break</th>
-                            <th>Total Hrs</th>
-                            <th>Normal</th>
-                        </tr>
-                    </thead>
+                  
+<thead>
+    <tr>
+        <th style="min-width:240px;">Worker</th>
+        <th>Trade</th>
+        <th>Civil ID</th>
+        <th>Attendance</th>
+        <th>IN</th>
+        <th>OUT</th>
+        <th>Break</th>
+        <th>Total Hrs</th>
+        <th>Normal</th>
+        <th style="width:70px; text-align:center;">
+            <button type="button"
+                class="est-add-row"
+                style="background:#15803d;color:white;border:0;border-radius:5px;width:30px;height:28px;font-size:18px;font-weight:bold;cursor:pointer;">
+                +
+            </button>
+        </th>
+    </tr>
+</thead>
+
+<tbody id="est-employee-rows">
+    <tr>
+        <td colspan="10" class="est-empty">
+            
+        </td>
+    </tr>
+</tbody>
+
 
                     <tbody id="est-employee-rows">
                         <tr>
                             <td colspan="8" class="est-empty">
-                                Loading Employees...
+                             
                             </td>
                         </tr>
                     </tbody>
@@ -908,7 +914,7 @@ overlay.find('.est-ok').hover(
         tbody.html(`
             <tr>
                 <td colspan="8" class="est-empty">
-                    Loading Employees...
+                    
                 </td>
             </tr>
         `);
@@ -917,7 +923,7 @@ overlay.find('.est-ok').hover(
 
             // Load supplier shift for selected Site
 
-            await load_standard_shift();
+            // await load_standard_shift();
 
             // Load Employee metadata
 
@@ -1111,64 +1117,234 @@ overlay.find('.est-ok').hover(
 
 
 
+//     // =====================================================
+//     // SECTION 12: RENDER EMPLOYEE TABLE
+//     // =====================================================
+
+//     function render_employees(shift_map) {
+
+//         const tbody = $('#est-employee-rows');
+
+//         tbody.empty();
+
+//         if (!employees.length) {
+
+//             tbody.html(`
+//             <tr>
+//                 <td colspan="9" class="est-empty">
+//                     No Employees found for the selected Site.
+//                 </td>
+//             </tr>
+//         `);
+
+//             update_summary();
+//             return;
+//         }
+
+//         employees.forEach(emp => {
+
+//             // Designation displayed in Trade column
+//             const trade = emp.designation || '-';
+
+//             // Employee Civil ID
+//             const civil_id = emp.civil_id || '-';
+
+//             const normal_hours = shift_map[emp.name] || 0;
+
+//             const employee_name = emp.employee_name || emp.name;
+
+//             const row = $(`
+//             <tr class="est-row"
+//                 data-employee="${escape_html(emp.name)}">
+
+//                 <td>
+//                     <div class="est-worker">
+
+//                         <div class="est-avatar">
+//                             ${escape_html(initials(employee_name))}
+//                         </div>
+
+//                         <div>
+//                             <div class="est-worker-name">
+//                                 ${escape_html(employee_name)}
+//                             </div>
+
+//                             <div class="est-worker-id">
+//                                 ${escape_html(emp.name)}
+//                             </div>
+//                         </div>
+
+//                     </div>
+//                 </td>
+
+//                 <td class="est-trade-value">
+//                     ${escape_html(trade)}
+//                 </td>
+
+//                 <td class="est-civil-id-value">
+//                     ${escape_html(civil_id)}
+//                 </td>
+
+//                 <td>
+//                     <select class="est-input est-attendance">
+
+//                         <option value="Present">Present</option>
+//                         <option value="Absent">Absent</option>
+//                         <option value="Half Day">Half Day</option>
+//                         <option value="Sick">Sick</option>
+//                         <option value="Leave">Leave</option>
+
+//                     </select>
+//                 </td>
+// <td>
+//     <input type="hidden" class="est-in">
+
+//     <button type="button"
+//         class="est-time-picker-btn"
+//         data-time-type="in">
+//         IN - Select
+//     </button>
+// </td>
+
+// <td>
+//     <input type="hidden" class="est-out">
+
+//     <button type="button"
+//         class="est-time-picker-btn"
+//         data-time-type="out">
+//         OUT - Select
+//     </button>
+// </td>
+//                 <td>
+// <input type="hidden" class="est-break" value="00:00">
+
+// <button type="button"
+//     class="est-time-picker-btn est-break-picker-btn"
+//     data-time-type="break">
+//     BREAK - Select
+// </button>
+//                 </td>
+
+//                 <td class="est-total">
+//                     <span class="est-readonly est-total-value">0</span>
+//                 </td>
+
+//                 <td class="est-normal">
+//                     <span class="est-readonly est-normal-value">
+//                         ${format_hours(normal_hours)}
+//                     </span>
+//                 </td>
+
+//             </tr>
+//         `);
+
+//             tbody.append(row);
+
+//         });
+
+//         update_summary();
+
+//     }
+
+
+
+
+
+
+
     // =====================================================
     // SECTION 12: RENDER EMPLOYEE TABLE
+    // ADD / REMOVE EMPLOYEE ROWS
     // =====================================================
 
-    function render_employees(shift_map) {
+    function get_selected_employee_ids() {
 
-        const tbody = $('#est-employee-rows');
+        return $('.est-row')
+            .map(function() {
+                return $(this).attr('data-employee');
+            })
+            .get()
+            .filter(Boolean);
 
-        tbody.empty();
+    }
 
-        if (!employees.length) {
 
-            tbody.html(`
-            <tr>
-                <td colspan="9" class="est-empty">
-                    No Employees found for the selected Site.
-                </td>
-            </tr>
-        `);
+    function get_available_employees() {
 
-            update_summary();
-            return;
-        }
+        const selected_ids = get_selected_employee_ids();
 
-        employees.forEach(emp => {
+        return employees.filter(emp =>
+            !selected_ids.includes(emp.name)
+        );
 
-            // Designation displayed in Trade column
-            const trade = emp.designation || '-';
+    }
 
-            // Employee Civil ID
-            const civil_id = emp.civil_id || '-';
 
-            const normal_hours = shift_map[emp.name] || 0;
+    // =====================================================
+    // CREATE EMPLOYEE ROW
+    // =====================================================
 
-            const employee_name = emp.employee_name || emp.name;
+    function create_employee_row(emp, shift_map) {
 
-            const row = $(`
-            <tr class="est-row"
-                data-employee="${escape_html(emp.name)}">
+        const is_new = !emp;
 
-                <td>
-                    <div class="est-worker">
+        const employee_name = emp
+            ? (emp.employee_name || emp.name)
+            : '';
 
-                        <div class="est-avatar">
-                            ${escape_html(initials(employee_name))}
-                        </div>
+        const trade = emp
+            ? (emp.designation || '-')
+            : '-';
 
-                        <div>
-                            <div class="est-worker-name">
-                                ${escape_html(employee_name)}
-                            </div>
+        const civil_id = emp
+            ? (emp.civil_id || '-')
+            : '-';
 
-                            <div class="est-worker-id">
-                                ${escape_html(emp.name)}
-                            </div>
-                        </div>
+        const normal_hours = emp
+            ? (shift_map[emp.name] || 0)
+            : 0;
 
+        const employee_cell = emp ? `
+            <div class="est-worker">
+
+                <div class="est-avatar">
+                    ${escape_html(initials(employee_name))}
+                </div>
+
+                <div>
+                    <div class="est-worker-name">
+                        ${escape_html(employee_name)}
                     </div>
+
+                    <div class="est-worker-id">
+                        ${escape_html(emp.name)}
+                    </div>
+                </div>
+
+            </div>
+        ` : `
+            <select class="est-input est-employee-select"
+                style="min-width:220px;">
+
+                <option value="">Select Employee</option>
+
+                ${get_available_employees().map(employee => `
+                    <option value="${escape_html(employee.name)}">
+                        ${escape_html(employee.employee_name || employee.name)}
+                        (${escape_html(employee.name)})
+                    </option>
+                `).join('')}
+
+            </select>
+        `;
+
+
+        const row = $(`
+            <tr class="est-row"
+                data-employee="${emp ? escape_html(emp.name) : ''}">
+
+                <td class="est-worker-cell">
+                    ${employee_cell}
                 </td>
 
                 <td class="est-trade-value">
@@ -1190,33 +1366,37 @@ overlay.find('.est-ok').hover(
 
                     </select>
                 </td>
-<td>
-    <input type="hidden" class="est-in">
 
-    <button type="button"
-        class="est-time-picker-btn"
-        data-time-type="in">
-        IN - Select
-    </button>
-</td>
-
-<td>
-    <input type="hidden" class="est-out">
-
-    <button type="button"
-        class="est-time-picker-btn"
-        data-time-type="out">
-        OUT - Select
-    </button>
-</td>
                 <td>
-<input type="hidden" class="est-break" value="00:00">
+                    <input type="hidden" class="est-in">
 
-<button type="button"
-    class="est-time-picker-btn est-break-picker-btn"
-    data-time-type="break">
-    BREAK - Select
-</button>
+                    <button type="button"
+                        class="est-time-picker-btn"
+                        data-time-type="in">
+                        IN - Select
+                    </button>
+                </td>
+
+                <td>
+                    <input type="hidden" class="est-out">
+
+                    <button type="button"
+                        class="est-time-picker-btn"
+                        data-time-type="out">
+                        OUT - Select
+                    </button>
+                </td>
+
+                <td>
+                    <input type="hidden"
+                        class="est-break"
+                        value="00:00">
+
+                    <button type="button"
+                        class="est-time-picker-btn est-break-picker-btn"
+                        data-time-type="break">
+                        BREAK - Select
+                    </button>
                 </td>
 
                 <td class="est-total">
@@ -1229,8 +1409,53 @@ overlay.find('.est-ok').hover(
                     </span>
                 </td>
 
+                <td style="text-align:center;">
+
+                    <button type="button"
+                        class="est-remove-row"
+                        title="Remove Employee"
+                        style="background:#dc2626;color:white;border:0;border-radius:5px;width:30px;height:28px;font-size:18px;font-weight:bold;cursor:pointer;">
+                        −
+                    </button>
+
+                </td>
+
             </tr>
         `);
+
+        return row;
+
+    }
+
+
+    // =====================================================
+    // RENDER INITIAL EMPLOYEE ROWS
+    // =====================================================
+
+    function render_employees(shift_map) {
+
+        const tbody = $('#est-employee-rows');
+
+        tbody.empty();
+
+        if (!employees.length) {
+
+            tbody.html(`
+                <tr>
+                    <td colspan="10" class="est-empty">
+                        No Employees found for the selected Site.
+                    </td>
+                </tr>
+            `);
+
+            update_summary();
+
+            return;
+        }
+
+        employees.forEach(emp => {
+
+            const row = create_employee_row(emp, shift_map);
 
             tbody.append(row);
 
@@ -1239,6 +1464,230 @@ overlay.find('.est-ok').hover(
         update_summary();
 
     }
+
+
+    // =====================================================
+    // ADD NEW EMPLOYEE ROW
+    // =====================================================
+
+    $(page.body).on('click', '.est-add-row', function() {
+
+        const available = get_available_employees();
+
+        if (!available.length) {
+
+            frappe.msgprint({
+                title: 'No Available Employees',
+                message: 'All employees deployed to this Site are already selected.',
+                indicator: 'orange'
+            });
+
+            return;
+        }
+
+        const new_row = create_employee_row(null, employee_shift_map);
+
+        $('#est-employee-rows').append(new_row);
+
+        update_summary();
+
+    });
+
+
+    // =====================================================
+    // REMOVE EMPLOYEE ROW
+    // =====================================================
+
+    $(page.body).on('click', '.est-remove-row', function() {
+
+        $(this).closest('.est-row').remove();
+
+        // Refresh dropdown options in remaining new rows.
+        refresh_employee_dropdowns();
+
+        update_summary();
+
+    });
+
+
+    // =====================================================
+    // EMPLOYEE SELECTION IN NEW ROW
+    // =====================================================
+
+    $(page.body).on('change', '.est-employee-select', function() {
+
+        const select = $(this);
+
+        const employee_id = select.val();
+
+        const row = select.closest('.est-row');
+
+        if (!employee_id) {
+            return;
+        }
+
+        // Prevent duplicate employee selection.
+        const already_selected = $('.est-row').filter(function() {
+
+            return (
+                $(this).attr('data-employee') === employee_id &&
+                this !== row[0]
+            );
+
+        }).length;
+
+        if (already_selected) {
+
+            frappe.msgprint({
+                title: 'Employee Already Selected',
+                message: 'This employee is already available in another row.',
+                indicator: 'orange'
+            });
+
+            select.val('');
+
+            return;
+        }
+
+        const emp = employees.find(e => e.name === employee_id);
+
+        if (!emp) {
+            return;
+        }
+
+        const employee_name = emp.employee_name || emp.name;
+
+        // Set selected employee.
+        row.attr('data-employee', emp.name);
+
+        // Replace dropdown with employee details.
+        row.find('.est-worker-cell').html(`
+            <div class="est-worker">
+
+                <div class="est-avatar">
+                    ${escape_html(initials(employee_name))}
+                </div>
+
+                <div>
+                    <div class="est-worker-name">
+                        ${escape_html(employee_name)}
+                    </div>
+
+                    <div class="est-worker-id">
+                        ${escape_html(emp.name)}
+                    </div>
+                </div>
+
+            </div>
+        `);
+
+        // Populate employee details.
+        row.find('.est-trade-value').text(
+            emp.designation || '-'
+        );
+
+        row.find('.est-civil-id-value').text(
+            emp.civil_id || '-'
+        );
+
+        row.find('.est-normal-value').text(
+            format_hours(employee_shift_map[emp.name] || 0)
+        );
+
+        // Refresh remaining dropdown options.
+        refresh_employee_dropdowns();
+
+        update_summary();
+
+    });
+
+
+    // =====================================================
+    // REFRESH AVAILABLE EMPLOYEES IN ALL NEW ROWS
+    // =====================================================
+
+    function refresh_employee_dropdowns() {
+
+        $('.est-employee-select').each(function() {
+
+            const select = $(this);
+
+            const current_value = select.val();
+
+            const row = select.closest('.est-row');
+
+            const selected_ids = get_selected_employee_ids();
+
+            // Include employees selected in other pending dropdowns.
+            $('.est-employee-select').not(this).each(function() {
+
+                if ($(this).val()) {
+                    selected_ids.push($(this).val());
+                }
+
+            });
+
+            select.empty();
+
+            select.append(
+                new Option('Select Employee', '')
+            );
+
+            employees.forEach(emp => {
+
+                if (
+                    !selected_ids.includes(emp.name) ||
+                    emp.name === current_value
+                ) {
+
+                    select.append(
+                        new Option(
+                            `${emp.employee_name || emp.name} (${emp.name})`,
+                            emp.name
+                        )
+                    );
+
+                }
+
+            });
+
+            if (current_value) {
+                select.val(current_value);
+            }
+
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // =====================================================
     // SECTION 13: INPUT CHANGE EVENTS
     // TOTAL HOURS CALCULATION
@@ -1313,7 +1762,10 @@ overlay.find('.est-ok').hover(
 
         $('#est-normal').text(format_hours(normal_hours));
 
-        $('#est-employees').text(employees.length);
+        // $('#est-employees').text(employees.length);
+
+
+        $('#est-employees').text($('.est-row').length);
     }
 
 
@@ -1357,8 +1809,11 @@ overlay.find('.est-ok').hover(
         }
     );
 
+
+
+
     // =====================================================
-    // SECTION 18: APPLY STANDARD SHIFT
+    // SECTION 18: APPLY STANDARD SHIFT FROM DEPLOYMENTS
     // =====================================================
 
     function normalize_time(value) {
@@ -1375,62 +1830,294 @@ overlay.find('.est-ok').hover(
     }
 
 
-    $(page.body).on('click', '#est-apply-shift', function() {
+    $(page.body).on('click', '#est-apply-shift', async function() {
 
-        const in_time = normalize_time(standard_shift.in_time);
+        const selected_site = $('#est-site').val();
 
-        const out_time = normalize_time(standard_shift.out_time);
+        if (!selected_site) {
 
-        if (!in_time || !out_time) {
-
-            frappe.msgprint({
-                title: 'Shift Time Missing',
-                message: 'Supplier standard IN and OUT times are not configured.',
-                indicator: 'orange'
-            });
+            frappe.msgprint('Please select a Site.');
 
             return;
         }
 
-        if (!employees.length) {
+        const rows = $('.est-row');
+
+        if (!rows.length) {
 
             frappe.msgprint('No Employees available for the selected Site.');
 
             return;
         }
 
-        $('.est-row').each(function() {
+        const button = $(this);
 
-            const row = $(this);
+        button.prop('disabled', true);
 
-            // // Set IN Time
-            // row.find('.est-in').val(in_time);
+        try {
 
-            // // Set OUT Time
-            // row.find('.est-out').val(out_time);
-            set_est_time(row, 'in', in_time);
-            set_est_time(row, 'out', out_time);
+            // STEP 1: FETCH DEPLOYMENTS FOR SELECTED SITE
 
-            // Recalculate Total Hours
-            const total = calculate_total(
-                in_time,
-                out_time,
-                row.find('.est-break').val()
+            const deployments = await frappe.db.get_list(
+                'Deployments', {
+                    fields: [
+                        'name',
+                        'custom_site',
+                        'custom_employee_id',
+                        'custom_shift_in_time',
+                        'custom_shift_out_time'
+                    ],
+                    filters: {
+                        custom_site: selected_site
+                    },
+                    order_by: 'modified desc',
+                    limit_page_length: 5000
+                }
             );
 
-            row.find('.est-total-value').text(format_hours(total));
+            console.log('Selected Site:', selected_site);
+            console.log('Deployment Records:', deployments);
 
-        });
+            let applied_count = 0;
+            let missing_employees = [];
 
-        // Update Summary
-        update_summary();
+            // STEP 2: CHECK EACH EMPLOYEE ROW
 
-        frappe.show_alert({
-            message: 'Standard IN and OUT Shift Applied Successfully',
-            indicator: 'green'
-        });
+            $('.est-row').each(function() {
+
+                const row = $(this);
+
+                const employee_id = row.attr('data-employee');
+
+                if (!employee_id) {
+                    return;
+                }
+
+                // Match BOTH Employee and Site
+
+                const deployment = deployments.find(d =>
+
+                    d.custom_employee_id === employee_id &&
+                    d.custom_site === selected_site
+
+                );
+
+                if (!deployment) {
+
+                    console.warn(
+                        'Deployment not found for:',
+                        employee_id,
+                        selected_site
+                    );
+
+                    missing_employees.push(employee_id);
+
+                    return;
+                }
+
+                // STEP 3: FETCH SHIFT TIMES FROM DEPLOYMENT
+
+                const in_time = normalize_time(
+                    deployment.custom_shift_in_time
+                );
+
+                const out_time = normalize_time(
+                    deployment.custom_shift_out_time
+                );
+
+                if (!in_time || !out_time) {
+
+                    console.warn(
+                        'Shift IN/OUT time missing:',
+                        employee_id,
+                        deployment.name
+                    );
+
+                    missing_employees.push(employee_id);
+
+                    return;
+                }
+
+                console.log(
+                    'Applying Shift:',
+                    employee_id,
+                    in_time,
+                    out_time
+                );
+
+                // STEP 4: SET IN AND OUT TIME
+
+                set_est_time(row, 'in', in_time);
+
+                set_est_time(row, 'out', out_time);
+
+                // STEP 5: RECALCULATE TOTAL HOURS
+
+                const total = calculate_total(
+                    in_time,
+                    out_time,
+                    row.find('.est-break').val()
+                );
+
+                row.find('.est-total-value').text(
+                    format_hours(total)
+                );
+
+                applied_count++;
+
+            });
+
+            // STEP 6: UPDATE SUMMARY
+
+            update_summary();
+
+            console.log('Successfully Applied:', applied_count);
+            console.log('Missing Shift:', missing_employees);
+
+            if (applied_count > 0) {
+
+                frappe.show_alert({
+                    message: 'Standard IN and OUT Shift Applied Successfully',
+                    indicator: 'green'
+                });
+
+            }
+
+            if (missing_employees.length) {
+
+                frappe.msgprint({
+                    title: 'Shift Not Available',
+                    message:
+                        'Deployment shift time is missing for: ' +
+                        missing_employees.join(', '),
+                    indicator: 'orange'
+                });
+
+            }
+
+            if (!applied_count && !missing_employees.length) {
+
+                frappe.msgprint('No employee rows available to update.');
+
+            }
+
+        } catch (error) {
+
+            console.error('Deployment Shift Error:', error);
+
+            frappe.msgprint({
+                title: 'Deployment Shift Error',
+                message: error.message,
+                indicator: 'red'
+            });
+
+        } finally {
+
+            button.prop('disabled', false);
+
+        }
 
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // =====================================================
+    // // SECTION 18: APPLY STANDARD SHIFT
+    // // =====================================================
+
+    // function normalize_time(value) {
+
+    //     if (!value) return '';
+
+    //     const parts = String(value).trim().split(':');
+
+    //     if (parts.length < 2) return '';
+
+    //     return String(parts[0]).padStart(2, '0') + ':' +
+    //         String(parts[1]).padStart(2, '0');
+
+    // }
+
+
+    // $(page.body).on('click', '#est-apply-shift', function() {
+
+    //     const in_time = normalize_time(standard_shift.in_time);
+
+    //     const out_time = normalize_time(standard_shift.out_time);
+
+    //     if (!in_time || !out_time) {
+
+    //         frappe.msgprint({
+    //             title: 'Shift Time Missing',
+    //             message: 'Supplier standard IN and OUT times are not configured.',
+    //             indicator: 'orange'
+    //         });
+
+    //         return;
+    //     }
+
+    //     if (!employees.length) {
+
+    //         frappe.msgprint('No Employees available for the selected Site.');
+
+    //         return;
+    //     }
+
+    //     $('.est-row').each(function() {
+
+    //         const row = $(this);
+
+    //         // // Set IN Time
+    //         // row.find('.est-in').val(in_time);
+
+    //         // // Set OUT Time
+    //         // row.find('.est-out').val(out_time);
+    //         set_est_time(row, 'in', in_time);
+    //         set_est_time(row, 'out', out_time);
+
+    //         // Recalculate Total Hours
+    //         const total = calculate_total(
+    //             in_time,
+    //             out_time,
+    //             row.find('.est-break').val()
+    //         );
+
+    //         row.find('.est-total-value').text(format_hours(total));
+
+    //     });
+
+    //     // Update Summary
+    //     update_summary();
+
+    //     frappe.show_alert({
+    //         message: 'Standard IN and OUT Shift Applied Successfully',
+    //         indicator: 'green'
+    //     });
+
+    // });
 
 
 
