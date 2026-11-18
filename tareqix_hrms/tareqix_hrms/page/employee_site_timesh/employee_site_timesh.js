@@ -511,6 +511,8 @@ overlay.find('.est-ok').hover(
         <th>IN</th>
         <th>OUT</th>
         <th>Break</th>
+        <th>OT Day Hrs</th>
+        <th>OT Night Hrs</th>
         <th>Total Hrs</th>
         <th>Normal</th>
         <th style="width:70px; text-align:center;">
@@ -1399,6 +1401,39 @@ overlay.find('.est-ok').hover(
                     </button>
                 </td>
 
+
+
+
+
+                <td>
+    <input type="hidden"
+        class="est-ot_day"
+        value="00:00">
+
+    <button type="button"
+        class="est-time-picker-btn"
+        data-time-type="ot_day">
+        OT DAY HRS - Select
+    </button>
+</td>
+
+
+<!-- NEW OT NIGHT HOURS COLUMN -->
+
+<td>
+    <input type="hidden"
+        class="est-ot_night"
+        value="00:00">
+
+    <button type="button"
+        class="est-time-picker-btn"
+        data-time-type="ot_night">
+        OT NIGHT HRS - Select
+    </button>
+</td>
+
+
+
                 <td class="est-total">
                     <span class="est-readonly est-total-value">0</span>
                 </td>
@@ -1658,6 +1693,8 @@ overlay.find('.est-ok').hover(
         });
 
     }
+
+
 
 
 
@@ -2142,50 +2179,90 @@ overlay.find('.est-ok').hover(
     // FORMAT TIME FOR BUTTON DISPLAY
     // =====================================================
 
-    function format_est_time_display(value, type) {
+    // function format_est_time_display(value, type) {
 
-        if (!value) return '';
+    //     if (!value) return '';
 
-        const parts = value.split(':');
+    //     const parts = value.split(':');
 
-        if (type === 'break') {
-            return parts[0] + ':' + parts[1];
-        }
+    //     if (type === 'break') {
+    //         return parts[0] + ':' + parts[1];
+    //     }
 
-        let hour = parseInt(parts[0], 10);
+    //     let hour = parseInt(parts[0], 10);
 
-        const minute = String(parts[1] || '00').padStart(2, '0');
+    //     const minute = String(parts[1] || '00').padStart(2, '0');
 
-        const period = hour >= 12 ? 'PM' : 'AM';
+    //     const period = hour >= 12 ? 'PM' : 'AM';
 
-        hour = hour % 12 || 12;
+    //     hour = hour % 12 || 12;
 
-        return String(hour).padStart(2, '0') +
-            ':' + minute + ' ' + period;
+    //     return String(hour).padStart(2, '0') +
+    //         ':' + minute + ' ' + period;
 
+    // }
+
+
+
+
+
+
+function format_est_time_display(value, type) {
+
+    if (!value) return '';
+
+    const parts = value.split(':');
+
+    if (['break', 'ot_day', 'ot_night'].includes(type)) {
+        return parts[0] + ':' + parts[1];
     }
+
+    let hour = parseInt(parts[0], 10);
+
+    const minute = String(parts[1] || '00').padStart(2, '0');
+
+    const period = hour >= 12 ? 'PM' : 'AM';
+
+    hour = hour % 12 || 12;
+
+    return String(hour).padStart(2, '0') +
+        ':' + minute + ' ' + period;
+
+}
+
 
 
     // =====================================================
     // SET TIME INTO IN / OUT INPUT AND BUTTON
     // =====================================================
 
-    function set_est_time(row, type, value) {
 
-        const time = value ? value.substring(0, 5) : '';
+function set_est_time(row, type, value) {
 
-        row.find('.est-' + type).val(time);
+    const time = value ? value.substring(0, 5) : '';
 
-        row.find(
-            `.est-time-picker-btn[data-time-type="${type}"]`
-        ).text(
-            time ?
-            type.toUpperCase() + ' - ' +
-            format_est_time_display(time, type) :
-            type.toUpperCase() + ' - Select'
-        );
+    row.find('.est-' + type).val(time);
 
-    }
+    const labels = {
+        in: 'IN',
+        out: 'OUT',
+        break: 'BREAK',
+        ot_day: 'OT DAY HRS',
+        ot_night: 'OT NIGHT HRS'
+    };
+
+    const label = labels[type] || type.toUpperCase();
+
+    row.find(
+        `.est-time-picker-btn[data-time-type="${type}"]`
+    ).text(
+        time ?
+        label + ' - ' + format_est_time_display(time, type) :
+        label + ' - Select'
+    );
+
+}
+
 
 
     // =====================================================
@@ -2194,10 +2271,16 @@ overlay.find('.est-ok').hover(
 
     function open_est_time_picker($input, $btn, type) {
 
+
+
+        const is_break = ['break', 'ot_day', 'ot_night'].includes(type);
+        const is_ot_day = type === "ot_day";
+        const is_ot_night = type === "ot_night";
+
         // Remove previously opened clock
         $('.est-time-overlay').remove();
 
-        const is_break = type === 'break';
+        const is_duration = ['break', 'ot_day', 'ot_night'].includes(type);
 
         let hour = is_break ? 0 : 9;
         let minute = 0;
@@ -3165,234 +3248,248 @@ overlay.find('.est-ok').hover(
 
 
 
-    // =====================================================
-    // SECTION 20: SUBMIT TIME SHEET
-    // =====================================================
 
-    $(page.body).on('click', '#est-submit-timesheet', async function() {
+// =====================================================
+// SECTION 20: SUBMIT TIME SHEET
+// =====================================================
 
-        const button = $(this);
+$(page.body).on('click', '#est-submit-timesheet', async function() {
 
-        const selected_site = $('#est-site').val();
+    const button = $(this);
 
-        const selected_date = $('#est-date').val();
+    const selected_site = $('#est-site').val();
 
-        if (!selected_site) {
+    const selected_date = $('#est-date').val();
 
-            frappe.msgprint({
-                title: 'Site Required',
-                message: 'Please select a Site before submitting the Time Sheet.',
-                indicator: 'orange'
-            });
+    if (!selected_site) {
 
-            return;
-        }
-
-        const rows = $('.est-row');
-
-        if (!rows.length) {
-
-            frappe.msgprint('No employee rows available to submit.');
-
-            return;
-        }
-
-        // Confirmation
-        const confirmed = await new Promise(resolve => {
-
-            frappe.confirm(
-                `Create Site TimeSheet records for ${rows.length} employees at ${selected_site}?`,
-                () => resolve(true),
-                () => resolve(false)
-            );
-
+        frappe.msgprint({
+            title: 'Site Required',
+            message: 'Please select a Site before submitting the Time Sheet.',
+            indicator: 'orange'
         });
 
-        if (!confirmed) return;
+        return;
+    }
 
-        button.prop('disabled', true);
+    const rows = $('.est-row');
 
-        const original_html = button.html();
+    if (!rows.length) {
 
-        button.html(
-            '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+        frappe.msgprint('No employee rows available to submit.');
+
+        return;
+    }
+
+    // Confirmation
+
+    const confirmed = await new Promise(resolve => {
+
+        frappe.confirm(
+            `Create Site TimeSheet records for ${rows.length} employees at ${selected_site}?`,
+            () => resolve(true),
+            () => resolve(false)
         );
 
-        let created = 0;
+    });
 
-        const errors = [];
+    if (!confirmed) return;
 
-        try {
+    button.prop('disabled', true);
 
-            for (const element of rows.toArray()) {
+    const original_html = button.html();
 
-                const row = $(element);
+    button.html(
+        '<i class="fa fa-spinner fa-spin"></i> Submitting...'
+    );
 
-                const employee_id = row.attr('data-employee');
+    let created = 0;
 
-                const trade = row.find('.est-trade-value').text().trim();
+    const errors = [];
 
-                const civil_id = row.find('.est-civil-id-value').text().trim();
+    try {
 
-                const in_time = row.find('.est-in').val() || null;
+        for (const element of rows.toArray()) {
 
-                const out_time = row.find('.est-out').val() || null;
+            const row = $(element);
 
-                // Check whether at least one time is entered
-                if (!in_time && !out_time) {
+            const employee_id = row.attr('data-employee');
 
-                    errors.push(
-                        `${employee_id}: Please enter IN or OUT time.`
-                    );
+            const trade = row.find('.est-trade-value').text().trim();
 
-                    continue;
+            const civil_id = row.find('.est-civil-id-value').text().trim();
 
-                }
+            const in_time = row.find('.est-in').val() || null;
 
-                // Common Site TimeSheet fields
-                const common_doc = {
+            const out_time = row.find('.est-out').val() || null;
 
-                    doctype: 'Site TimeSheet',
+            // Check whether at least one time is entered
 
-                    custom_date: selected_date,
+            if (!in_time && !out_time) {
 
-                    custom_emp_name: employee_id,
+                errors.push(
+                    `${employee_id}: Please enter IN or OUT time.`
+                );
 
-                    custom_trade: trade === '-' ? '' : trade,
-
-                    custom_civil_id: civil_id === '-' ? '' : civil_id,
-
-                    custom_attendance: row.find('.est-attendance').val(),
-
-                    custom_current_site: selected_site
-
-                };
-
-                try {
-
-                    // Create separate IN record
-                    if (in_time) {
-
-                        const in_doc = {
-
-                            ...common_doc,
-
-                            custom_log_type: 'IN',
-
-                            custom_in_time: in_time,
-
-                            custom_out_time: null,
-
-                            custom_total_hrs: 0,
-
-                            custom_rest_hrs: null,
-
-                            custom_normal_hrs: 0
-
-                        };
-
-                        await frappe.db.insert(in_doc);
-
-                        created++;
-
-                    }
-
-                    // Create separate OUT record
-                    if (out_time) {
-
-                        const out_doc = {
-
-                            ...common_doc,
-
-                            custom_log_type: 'OUT',
-
-                            custom_in_time: null,
-
-                            custom_out_time: out_time,
-
-                            custom_total_hrs: row.find('.est-total-value').text().trim(),
-
-                            custom_rest_hrs: row.find('.est-break').val() || null,
-
-                            custom_normal_hrs: row.find('.est-normal-value').text().trim()
-
-                        };
-
-                        await frappe.db.insert(out_doc);
-
-                        created++;
-
-                    }
-
-                } catch (row_error) {
-
-                    console.error(
-                        'Site TimeSheet creation failed for',
-                        employee_id,
-                        row_error
-                    );
-
-                    errors.push(
-                        `${employee_id}: ${row_error.message || 'Unknown error'}`
-                    );
-
-                }
+                continue;
 
             }
 
-            if (errors.length) {
+            // Common Site TimeSheet fields
 
-                frappe.msgprint({
+            const common_doc = {
 
-                    title: 'Time Sheet Submission Completed with Errors',
+                doctype: 'Site TimeSheet',
 
-                    indicator: 'orange',
+                custom_date: selected_date,
 
-                    message: `${created} record(s) created successfully.
+                custom_emp_name: employee_id,
+
+                custom_trade: trade === '-' ? '' : trade,
+
+                custom_civil_id: civil_id === '-' ? '' : civil_id,
+
+                custom_attendance: row.find('.est-attendance').val(),
+
+                custom_current_site: selected_site
+
+            };
+
+            try {
+
+                // Create separate IN record
+
+                if (in_time) {
+
+                    const in_doc = {
+
+                        ...common_doc,
+
+                        custom_log_type: 'IN',
+
+                        custom_in_time: in_time,
+
+                        custom_out_time: null,
+
+                        custom_total_hrs: 0,
+
+                        custom_rest_hrs: null,
+
+                        custom_normal_hrs: 0
+
+                    };
+
+                    await frappe.db.insert(in_doc);
+
+                    created++;
+
+                }
+
+                // Create separate OUT record
+
+                if (out_time) {
+
+                    const out_doc = {
+
+                        ...common_doc,
+
+                        custom_log_type: 'OUT',
+
+                        custom_in_time: null,
+
+                        custom_out_time: out_time,
+
+                        custom_total_hrs: row.find('.est-total-value').text().trim(),
+
+                        custom_rest_hrs: row.find('.est-break').val() || null,
+
+                        // NEW OT DAY HOURS
+
+                        custom_ot_day_hrs: row.find('.est-ot_day').val() || null,
+
+                        // NEW OT NIGHT HOURS
+
+                        custom_ot_night_hrs: row.find('.est-ot_night').val() || null,
+
+                        custom_normal_hrs: row.find('.est-normal-value').text().trim()
+
+                    };
+
+                    await frappe.db.insert(out_doc);
+
+                    created++;
+
+                }
+
+            } catch (row_error) {
+
+                console.error(
+                    'Site TimeSheet creation failed for',
+                    employee_id,
+                    row_error
+                );
+
+                errors.push(
+                    `${employee_id}: ${row_error.message || 'Unknown error'}`
+                );
+
+            }
+
+        }
+
+        if (errors.length) {
+
+            frappe.msgprint({
+
+                title: 'Time Sheet Submission Completed with Errors',
+
+                indicator: 'orange',
+
+                message: `${created} record(s) created successfully.
                     <br><br>
                     Failed records:
                     <br>
                     ${errors.map(escape_html).join('<br>')}`
 
-                });
+            });
 
-            } else {
-
-                frappe.msgprint({
-
-                    title: 'Time Sheet Submitted',
-
-                    indicator: 'green',
-
-                    message: `${created} Site TimeSheet record(s) created successfully for ${escape_html(selected_site)}.`
-
-                });
-
-            }
-
-        } catch (error) {
-
-            console.error('Time Sheet Submission Error:', error);
+        } else {
 
             frappe.msgprint({
 
-                title: 'Submission Error',
+                title: 'Time Sheet Submitted',
 
-                message: error.message || 'Unable to create Site TimeSheet records.',
+                indicator: 'green',
 
-                indicator: 'red'
+                message: `${created} Site TimeSheet record(s) created successfully for ${escape_html(selected_site)}.`
 
             });
 
-        } finally {
-
-            button.prop('disabled', false);
-
-            button.html(original_html);
-
         }
 
-    });
+    } catch (error) {
+
+        console.error('Time Sheet Submission Error:', error);
+
+        frappe.msgprint({
+
+            title: 'Submission Error',
+
+            message: error.message || 'Unable to create Site TimeSheet records.',
+
+            indicator: 'red'
+
+        });
+
+    } finally {
+
+        button.prop('disabled', false);
+
+        button.html(original_html);
+
+    }
+
+});
 
 
 

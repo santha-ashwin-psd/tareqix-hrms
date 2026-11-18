@@ -1,0 +1,472 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "VISAPROS-.#####",
+ "creation": "2026-11-18 13:00:55.024060",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_kxda",
+  "first_name",
+  "gender",
+  "date_of_joining",
+  "current_stage",
+  "color",
+  "column_break_kyel",
+  "last_name",
+  "employee_type",
+  "date_of_birth",
+  "vendor_supplier",
+  "custom_image",
+  "column_break_eqrz",
+  "middle_name",
+  "civil_id",
+  "designation",
+  "grade",
+  "custom_created_employee",
+  "section_break_rjmw",
+  "signed_offer_letter",
+  "column_break_rxvn",
+  "signed_employment_contract",
+  "column_break_e7cb",
+  "updated_cv__resume",
+  "column_break_dsht",
+  "recent_passport_size_photographs_white_background",
+  "column_break_uenp",
+  "passport_copy",
+  "section_break_xpxp",
+  "apostilled__mea_attested_educational_certificate",
+  "section_break_1l0k",
+  "company_commercial_registration_cr_copy",
+  "column_break_krto",
+  "omanisation_compliance_certificate",
+  "column_break_mgqo",
+  "candidate_passport_copy",
+  "column_break_6dq2",
+  "attested_educational__trade_certificate_copy",
+  "section_break_a5tt",
+  "official_ministry_of_labour_mol_work_permit",
+  "gamca_medical_and_pcc_section",
+  "wafid__gamca_medical_slip",
+  "column_break_tkrs",
+  "wafid__gamca_medical_fitness_certificate",
+  "column_break_sblh",
+  "approved_labour_clearance_copy",
+  "employment_visa_applied_rop_section",
+  "rop_evisa_application_form_receipt",
+  "column_break_vh1u",
+  "approved_labour_clearance_certificate",
+  "column_break_nj4a",
+  "gamca_medical_fitness_report_copy",
+  "column_break_lz2y",
+  "candidate_passport_scan_with_digital_white_background_photo",
+  "employment_visa_issued_section",
+  "official_rop_employment_evisa_copy",
+  "section_break_co5d",
+  "confirmed_one_way_flight_ticket",
+  "column_break_d056",
+  "printed_employment_evisa_copy",
+  "arrived_in_oman_medical_and_biometrics_section",
+  "passport_page_scan_with_oman_entry_stamp",
+  "column_break_g4jx",
+  "oman_ministry_of_health_moh_local_medical_fitness_certificate",
+  "column_break_dckt",
+  "rop_biometric__fingerprint_registration_receipt",
+  "column_break_nix5",
+  "blood_group_certificate",
+  "resident_card_issued_section",
+  "omani_resident_card_civil_id_copy",
+  "column_break_xlsy",
+  "ministry_of_labour_attested_local_employment_contract"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_kxda",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name "
+  },
+  {
+   "fieldname": "middle_name",
+   "fieldtype": "Data",
+   "label": "Middle Name"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Gender",
+   "options": "Gender",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee_type",
+   "fieldtype": "Select",
+   "label": "Employee Type",
+   "options": "\nDirect\nVendor",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_of_joining",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date of Joining",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "reqd": 1
+  },
+  {
+   "fieldname": "civil_id",
+   "fieldtype": "Data",
+   "label": "Civil ID "
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "grade",
+   "fieldtype": "Link",
+   "label": "Grade",
+   "options": "Employee Grade",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vendor_supplier",
+   "fieldtype": "Link",
+   "label": "Vendor (Supplier)",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "current_stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Current Stage",
+   "options": "\nOffer & Document Collection\nCertificate Attestation\nLabour Clearance Applied (MOL)\nLabour Clearance Approved\nGAMCA Medical & PCC\nEmployment Visa Applied (ROP)\nEmployment Visa Issued\nEmigration & Flight Booked\nArrived in Oman (Medical & Biometrics)\nResident Card Issued (Completed)\nOnboarded",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_kyel",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_rjmw",
+   "fieldtype": "Section Break",
+   "label": "Offer & Document Collection"
+  },
+  {
+   "fieldname": "column_break_rxvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_eqrz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_e7cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signed_offer_letter",
+   "fieldtype": "Attach",
+   "label": "Signed Offer Letter"
+  },
+  {
+   "fieldname": "signed_employment_contract",
+   "fieldtype": "Attach",
+   "label": "Signed Employment Contract."
+  },
+  {
+   "fieldname": "updated_cv__resume",
+   "fieldtype": "Attach",
+   "label": "Updated CV / Resume"
+  },
+  {
+   "fieldname": "column_break_dsht",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recent_passport_size_photographs_white_background",
+   "fieldtype": "Attach",
+   "label": "Recent Passport Size Photographs (white background)"
+  },
+  {
+   "fieldname": "column_break_uenp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "passport_copy",
+   "fieldtype": "Attach",
+   "label": "Passport Copy"
+  },
+  {
+   "fieldname": "section_break_xpxp",
+   "fieldtype": "Section Break",
+   "label": " Certificate Attestation"
+  },
+  {
+   "fieldname": "apostilled__mea_attested_educational_certificate",
+   "fieldtype": "Attach",
+   "label": "Apostilled / MEA Attested Educational Certificate"
+  },
+  {
+   "fieldname": "section_break_1l0k",
+   "fieldtype": "Section Break",
+   "label": "Labour Clearance Applied (MOL)"
+  },
+  {
+   "fieldname": "company_commercial_registration_cr_copy",
+   "fieldtype": "Attach",
+   "label": "Company Commercial Registration (CR) Copy"
+  },
+  {
+   "fieldname": "column_break_krto",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "omanisation_compliance_certificate",
+   "fieldtype": "Attach",
+   "label": "Omanisation Compliance Certificate"
+  },
+  {
+   "fieldname": "column_break_mgqo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_6dq2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attested_educational__trade_certificate_copy",
+   "fieldtype": "Attach",
+   "label": "Attested Educational / Trade Certificate Copy"
+  },
+  {
+   "fieldname": "section_break_a5tt",
+   "fieldtype": "Section Break",
+   "label": "Labour Clearance Approved "
+  },
+  {
+   "fieldname": "candidate_passport_copy",
+   "fieldtype": "Attach",
+   "label": "Candidate Passport Copy"
+  },
+  {
+   "fieldname": "official_ministry_of_labour_mol_work_permit",
+   "fieldtype": "Attach",
+   "label": "Official Ministry of Labour (MOL) Work Permit "
+  },
+  {
+   "fieldname": "gamca_medical_and_pcc_section",
+   "fieldtype": "Section Break",
+   "label": "GAMCA Medical and PCC"
+  },
+  {
+   "fieldname": "wafid__gamca_medical_slip",
+   "fieldtype": "Attach",
+   "label": "Wafid / GAMCA Medical Slip"
+  },
+  {
+   "fieldname": "column_break_tkrs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "wafid__gamca_medical_fitness_certificate",
+   "fieldtype": "Attach",
+   "label": "Wafid / GAMCA Medical Fitness Certificate "
+  },
+  {
+   "fieldname": "column_break_sblh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "approved_labour_clearance_copy",
+   "fieldtype": "Attach",
+   "label": "Approved Labour Clearance Copy"
+  },
+  {
+   "fieldname": "employment_visa_applied_rop_section",
+   "fieldtype": "Section Break",
+   "label": "Employment Visa Applied (ROP)"
+  },
+  {
+   "fieldname": "rop_evisa_application_form_receipt",
+   "fieldtype": "Attach",
+   "label": "ROP eVisa Application Form Receipt"
+  },
+  {
+   "fieldname": "column_break_vh1u",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "approved_labour_clearance_certificate",
+   "fieldtype": "Attach",
+   "label": "Approved Labour Clearance Certificate"
+  },
+  {
+   "fieldname": "column_break_nj4a",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gamca_medical_fitness_report_copy",
+   "fieldtype": "Attach",
+   "label": "GAMCA Medical Fitness Report Copy"
+  },
+  {
+   "fieldname": "column_break_lz2y",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "candidate_passport_scan_with_digital_white_background_photo",
+   "fieldtype": "Attach",
+   "label": "Candidate Passport Scan with Digital White Background Photo"
+  },
+  {
+   "fieldname": "employment_visa_issued_section",
+   "fieldtype": "Section Break",
+   "label": "Employment Visa Issued"
+  },
+  {
+   "fieldname": "official_rop_employment_evisa_copy",
+   "fieldtype": "Attach",
+   "label": "Official ROP Employment eVisa Copy"
+  },
+  {
+   "fieldname": "section_break_co5d",
+   "fieldtype": "Section Break",
+   "label": "Emigration and Flight Booked ("
+  },
+  {
+   "fieldname": "confirmed_one_way_flight_ticket",
+   "fieldtype": "Attach",
+   "label": "Confirmed One Way Flight Ticket"
+  },
+  {
+   "fieldname": "column_break_d056",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "printed_employment_evisa_copy",
+   "fieldtype": "Attach",
+   "label": "Printed Employment eVisa Copy"
+  },
+  {
+   "fieldname": "arrived_in_oman_medical_and_biometrics_section",
+   "fieldtype": "Section Break",
+   "label": "Arrived in Oman (Medical and Biometrics) "
+  },
+  {
+   "fieldname": "passport_page_scan_with_oman_entry_stamp",
+   "fieldtype": "Attach",
+   "label": "Passport Page Scan with Oman Entry Stamp"
+  },
+  {
+   "fieldname": "column_break_g4jx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "oman_ministry_of_health_moh_local_medical_fitness_certificate",
+   "fieldtype": "Attach",
+   "label": "Oman Ministry of Health (MOH) Local Medical Fitness Certificate"
+  },
+  {
+   "fieldname": "column_break_dckt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rop_biometric__fingerprint_registration_receipt",
+   "fieldtype": "Attach",
+   "label": "ROP Biometric / Fingerprint Registration Receipt"
+  },
+  {
+   "fieldname": "column_break_nix5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "blood_group_certificate",
+   "fieldtype": "Attach",
+   "label": "Blood Group Certificate"
+  },
+  {
+   "fieldname": "resident_card_issued_section",
+   "fieldtype": "Section Break",
+   "label": "Resident Card Issued"
+  },
+  {
+   "fieldname": "omani_resident_card_civil_id_copy",
+   "fieldtype": "Attach",
+   "label": "Omani Resident Card (Civil ID) Copy"
+  },
+  {
+   "fieldname": "column_break_xlsy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ministry_of_labour_attested_local_employment_contract",
+   "fieldtype": "Attach",
+   "label": "Ministry of Labour Attested Local Employment Contract"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "Color"
+  },
+  {
+   "fieldname": "custom_image",
+   "fieldtype": "Attach",
+   "label": "Image "
+  },
+  {
+   "fieldname": "custom_created_employee",
+   "fieldtype": "Link",
+   "label": "Created Employee",
+   "options": "Employee"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-18 16:40:21.374872",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "Visa and PRO",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
