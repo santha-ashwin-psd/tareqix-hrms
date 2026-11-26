@@ -35,8 +35,10 @@
   "recent_passport_size_photographs_white_background",
   "column_break_uenp",
   "passport_copy",
+  "custom_last_submission_offer",
   "section_break_xpxp",
   "apostilled__mea_attested_educational_certificate",
+  "custom_last_submission_certificate",
   "section_break_1l0k",
   "company_commercial_registration_cr_copy",
   "column_break_krto",
@@ -45,14 +47,17 @@
   "candidate_passport_copy",
   "column_break_6dq2",
   "attested_educational__trade_certificate_copy",
+  "custom_last_submission_laberclearance",
   "section_break_a5tt",
   "official_ministry_of_labour_mol_work_permit",
+  "custom_last_submission_labouraproved",
   "gamca_medical_and_pcc_section",
   "wafid__gamca_medical_slip",
   "column_break_tkrs",
   "wafid__gamca_medical_fitness_certificate",
   "column_break_sblh",
   "approved_labour_clearance_copy",
+  "custom_last_submission_gamca",
   "employment_visa_applied_rop_section",
   "rop_evisa_application_form_receipt",
   "column_break_vh1u",
@@ -61,12 +66,15 @@
   "gamca_medical_fitness_report_copy",
   "column_break_lz2y",
   "candidate_passport_scan_with_digital_white_background_photo",
+  "custom_last_submission_employment_visaapp",
   "employment_visa_issued_section",
   "official_rop_employment_evisa_copy",
+  "custom_last_submission_employment_visaissued",
   "section_break_co5d",
   "confirmed_one_way_flight_ticket",
   "column_break_d056",
   "printed_employment_evisa_copy",
+  "custom_last_submission_emigration_flight",
   "arrived_in_oman_medical_and_biometrics_section",
   "passport_page_scan_with_oman_entry_stamp",
   "column_break_g4jx",
@@ -75,10 +83,18 @@
   "rop_biometric__fingerprint_registration_receipt",
   "column_break_nix5",
   "blood_group_certificate",
+  "custom_last_submission_arrived_oman",
   "resident_card_issued_section",
   "omani_resident_card_civil_id_copy",
   "column_break_xlsy",
-  "ministry_of_labour_attested_local_employment_contract"
+  "ministry_of_labour_attested_local_employment_contract",
+  "custom_last_submission_residential_cardissued",
+  "address_tab",
+  "cust_visa_current_address",
+  "cust_visa_current_address_is",
+  "cust_visa_column_break_njlw",
+  "cust_visa_permanent_address",
+  "cust_visa_permanent_address_is"
  ],
  "fields": [
   {
@@ -439,12 +455,95 @@
    "fieldtype": "Link",
    "label": "Created Employee",
    "options": "Employee"
+  },
+  {
+   "fieldname": "custom_last_submission_offer",
+   "fieldtype": "Date",
+   "label": "Last Submission Date",
+   "width": "3"
+  },
+  {
+   "fieldname": "custom_last_submission_certificate",
+   "fieldtype": "Date",
+   "label": "Last Submission Date",
+   "width": "3"
+  },
+  {
+   "fieldname": "custom_last_submission_laberclearance",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_labouraproved",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_gamca",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_employment_visaapp",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_employment_visaissued",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_emigration_flight",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_arrived_oman",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "custom_last_submission_residential_cardissued",
+   "fieldtype": "Date",
+   "label": "Last Submission Date"
+  },
+  {
+   "fieldname": "address_tab",
+   "fieldtype": "Tab Break",
+   "label": "Address"
+  },
+  {
+   "fieldname": "cust_visa_current_address",
+   "fieldtype": "Small Text",
+   "label": "Current Address"
+  },
+  {
+   "fieldname": "cust_visa_current_address_is",
+   "fieldtype": "Select",
+   "label": "Current Address Is",
+   "options": "\nRented\nOwned"
+  },
+  {
+   "fieldname": "cust_visa_column_break_njlw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cust_visa_permanent_address",
+   "fieldtype": "Small Text",
+   "label": "Permanent Address"
+  },
+  {
+   "fieldname": "cust_visa_permanent_address_is",
+   "fieldtype": "Select",
+   "label": "Permanent Address Is",
+   "options": "\nRented\nOwned"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-18 16:40:21.374872",
+ "modified": "2026-11-19 18:03:15.907992",
  "modified_by": "Administrator",
  "module": "Tareqix Hrms",
  "name": "Visa and PRO",

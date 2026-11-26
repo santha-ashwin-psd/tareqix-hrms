@@ -1,0 +1,653 @@
+/* ================================================================
+   TAREQIX HRMS | OMAN EXECUTIVE DESIGN SYSTEM
+   Scoped to routes activated by hrms_theme.js
+   ================================================================ */
+
+html.tareqix-hrms-theme,
+body.tareqix-hrms-theme {
+    --tx-navy: #073b3a;
+    --tx-deep: #052f31;
+    --tx-emerald: #07866f;
+    --tx-emerald-dark: #056b5c;
+    --tx-gold: #d5a83f;
+    --tx-gold-light: #f3d37c;
+    --tx-ink: #142d35;
+    --tx-muted: #647b83;
+    --tx-line: #e2ebe8;
+    --tx-canvas: #f3f7f5;
+    --tx-white: #ffffff;
+    --tx-shadow: 0 12px 32px rgba(11, 48, 48, .09);
+    background: var(--tx-canvas) !important;
+    color: var(--tx-ink);
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+html.tareqix-hrms-theme body,
+body.tareqix-hrms-theme {
+    background: var(--tx-canvas) !important;
+}
+
+/* Main desk canvas */
+.tareqix-hrms-theme .main-section,
+.tareqix-hrms-theme .page-container,
+.tareqix-hrms-theme .layout-main-section-wrapper,
+.tareqix-hrms-theme .layout-main-section {
+    background-color: var(--tx-canvas) !important;
+}
+
+.tareqix-hrms-theme .page-container {
+    padding-bottom: 24px;
+}
+
+.tareqix-hrms-theme .layout-main-section {
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+    padding: 18px !important;
+}
+
+/* Top navbar */
+.tareqix-hrms-theme .navbar,
+.tareqix-hrms-theme .navbar-expand,
+.tareqix-hrms-theme header.navbar {
+    background: linear-gradient(100deg, #063b3a, #087a68) !important;
+    border-bottom: 1px solid rgba(218, 181, 91, .35) !important;
+    box-shadow: 0 3px 16px rgba(3, 43, 42, .12) !important;
+}
+
+.tareqix-hrms-theme .navbar *,
+.tareqix-hrms-theme .navbar a,
+.tareqix-hrms-theme .navbar .nav-link {
+    color: #f5fbf8 !important;
+}
+
+.tareqix-hrms-theme .navbar .search-bar,
+.tareqix-hrms-theme .navbar .search-bar input,
+.tareqix-hrms-theme .navbar .form-control {
+    background: rgba(255,255,255,.13) !important;
+    border: 1px solid rgba(255,255,255,.23) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+}
+
+/* Frappe v16 sidebar: body-sidebar is the visible sidebar */
+.tareqix-hrms-theme .body-sidebar,
+html.tareqix-hrms-theme .body-sidebar,
+body.tareqix-hrms-theme .body-sidebar {
+    background-color: #063b3a !important;
+    background-image:
+        radial-gradient(circle at 20% 10%, rgba(14, 151, 126, .20), transparent 28%),
+        repeating-linear-gradient(45deg, transparent 0 28px, rgba(211, 170, 72, .055) 29px 30px, transparent 31px 58px),
+        repeating-linear-gradient(-45deg, transparent 0 28px, rgba(211, 170, 72, .045) 29px 30px, transparent 31px 58px),
+        linear-gradient(180deg, #073e3d, #042e30) !important;
+    color: #eaf5f1 !important;
+    border-right: 2px solid rgba(213, 168, 63, .65) !important;
+    box-shadow: 5px 0 24px rgba(3, 43, 42, .10) !important;
+}
+
+.tareqix-hrms-theme .body-sidebar * {
+    scrollbar-color: rgba(213,168,63,.45) transparent;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item,
+.tareqix-hrms-theme .body-sidebar .sidebar-item-container,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-section {
+    background-color: transparent !important;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item {
+    color: #e5f1ed !important;
+    border: 1px solid transparent !important;
+    border-radius: 10px !important;
+    margin: 3px 8px !important;
+    min-height: 36px;
+    transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item a,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item span,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item .sidebar-item-label,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item svg,
+.tareqix-hrms-theme .body-sidebar .item-anchor,
+.tareqix-hrms-theme .body-sidebar .item-anchor * {
+    color: #e5f1ed !important;
+    stroke: currentColor;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item:hover,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item:hover .item-anchor {
+    background: rgba(19, 143, 119, .32) !important;
+    border-color: rgba(213,168,63,.24) !important;
+    color: #fff !important;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item.active-sidebar,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item.selected {
+    background: linear-gradient(100deg, rgba(213,168,63,.95), rgba(213,168,63,.25)) !important;
+    border: 1px solid rgba(245,213,133,.65) !important;
+    border-left: 4px solid #f1cf78 !important;
+    color: #092f30 !important;
+    font-weight: 700 !important;
+    box-shadow: 0 5px 16px rgba(0,0,0,.13) !important;
+}
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item.active-sidebar *,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item.selected * {
+    color: #092f30 !important;
+}
+
+.tareqix-hrms-theme .body-sidebar .section-title,
+.tareqix-hrms-theme .body-sidebar .sidebar-label,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-section .section-title {
+    color: #e6c36d !important;
+    font-weight: 750 !important;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.tareqix-hrms-theme .body-sidebar hr,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-section {
+    border-color: rgba(255,255,255,.12) !important;
+}
+
+/* Page heading and breadcrumb */
+.tareqix-hrms-theme .page-head {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(10,65,60,.08) !important;
+}
+
+.tareqix-hrms-theme .page-head .title-text,
+.tareqix-hrms-theme .page-head h3,
+.tareqix-hrms-theme .page-title {
+    color: var(--tx-ink) !important;
+    font-weight: 750 !important;
+}
+
+.tareqix-hrms-theme .breadcrumb-item,
+.tareqix-hrms-theme .breadcrumb-item a {
+    color: var(--tx-muted) !important;
+}
+
+/* Buttons */
+.tareqix-hrms-theme .btn {
+    border-radius: 10px !important;
+    font-weight: 650 !important;
+    transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.tareqix-hrms-theme .btn-primary,
+.tareqix-hrms-theme .btn-primary:focus {
+    background: linear-gradient(135deg, #078d75, #056b5c) !important;
+    border-color: #07816d !important;
+    color: #fff !important;
+    box-shadow: 0 5px 13px rgba(7,134,111,.18) !important;
+}
+
+.tareqix-hrms-theme .btn-primary:hover {
+    background: #045b50 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(7,134,111,.22) !important;
+}
+
+.tareqix-hrms-theme .btn-secondary,
+.tareqix-hrms-theme .btn-default,
+.tareqix-hrms-theme .btn-light {
+    background: #fff !important;
+    border: 1px solid #dce8e4 !important;
+    color: #28464b !important;
+}
+
+.tareqix-hrms-theme .btn-secondary:hover,
+.tareqix-hrms-theme .btn-default:hover,
+.tareqix-hrms-theme .btn-light:hover {
+    border-color: #c6a24c !important;
+    color: #075f55 !important;
+}
+
+/* Inputs, selects, filters and search controls */
+.tareqix-hrms-theme input.form-control,
+.tareqix-hrms-theme textarea.form-control,
+.tareqix-hrms-theme select.form-control,
+.tareqix-hrms-theme .form-control,
+.tareqix-hrms-theme .input-with-feedback,
+.tareqix-hrms-theme .frappe-control input,
+.tareqix-hrms-theme .frappe-control select,
+.tareqix-hrms-theme .frappe-control textarea {
+    background-color: #fff !important;
+    border: 1px solid #dce7e3 !important;
+    border-radius: 9px !important;
+    color: #213b42 !important;
+    box-shadow: none !important;
+}
+
+.tareqix-hrms-theme .form-control:focus,
+.tareqix-hrms-theme .input-with-feedback:focus,
+.tareqix-hrms-theme .frappe-control input:focus,
+.tareqix-hrms-theme .frappe-control select:focus {
+    border-color: #0a9a80 !important;
+    box-shadow: 0 0 0 3px rgba(8,145,117,.11) !important;
+}
+
+.tareqix-hrms-theme .control-label,
+.tareqix-hrms-theme .form-section .section-head,
+.tareqix-hrms-theme .form-dashboard-section .section-head {
+    color: #31545a !important;
+    font-weight: 700 !important;
+}
+
+/* List views and tables */
+.tareqix-hrms-theme .list-view-container,
+.tareqix-hrms-theme .frappe-list,
+.tareqix-hrms-theme .form-grid,
+.tareqix-hrms-theme .datatable {
+    border-radius: 13px !important;
+}
+
+.tareqix-hrms-theme .list-row-head,
+.tareqix-hrms-theme .list-header,
+.tareqix-hrms-theme .dt-header,
+.tareqix-hrms-theme .grid-heading-row {
+    background: #edf3f1 !important;
+    color: #35535a !important;
+    font-weight: 750 !important;
+}
+
+.tareqix-hrms-theme .list-row,
+.tareqix-hrms-theme .list-row-container,
+.tareqix-hrms-theme .dt-row,
+.tareqix-hrms-theme .grid-row {
+    background: #fff !important;
+    border-bottom: 1px solid #e8efec !important;
+}
+
+.tareqix-hrms-theme .list-row:hover,
+.tareqix-hrms-theme .list-row-container:hover,
+.tareqix-hrms-theme .dt-row:hover {
+    background: #f4faf7 !important;
+}
+
+.tareqix-hrms-theme .list-row .level-item,
+.tareqix-hrms-theme .list-row-head .level-item {
+    color: #29464d;
+}
+
+.tareqix-hrms-theme .indicator-pill,
+.tareqix-hrms-theme .badge {
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+}
+
+.tareqix-hrms-theme .indicator-pill.green,
+.tareqix-hrms-theme .badge-success {
+    background: #dcf6e9 !important;
+    color: #087b53 !important;
+}
+
+/* Forms */
+.tareqix-hrms-theme .form-layout,
+.tareqix-hrms-theme .form-section,
+.tareqix-hrms-theme .form-dashboard-section,
+.tareqix-hrms-theme .section-body {
+    background: #fff;
+    border-color: #e4ece8 !important;
+}
+
+.tareqix-hrms-theme .form-section,
+.tareqix-hrms-theme .form-dashboard-section {
+    border-radius: 12px !important;
+    margin-bottom: 14px !important;
+    box-shadow: 0 4px 15px rgba(13,54,51,.035);
+}
+
+/* Dropdowns, dialogs, popovers */
+.tareqix-hrms-theme .dropdown-menu,
+.tareqix-hrms-theme .popover,
+.tareqix-hrms-theme .modal-content,
+.tareqix-hrms-theme .awesomplete ul {
+    border: 1px solid #e1ebe7 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 14px 35px rgba(8,48,45,.14) !important;
+}
+
+.tareqix-hrms-theme .modal-header {
+    background: #f1f7f4 !important;
+    border-bottom: 1px solid #e0ebe6 !important;
+}
+
+/* Custom Oman hero used on selected list pages */
+.tareqix-hrms-theme .tx-oman-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 178px;
+    margin: -18px -18px 18px !important;
+    padding: 28px 30px 25px !important;
+    border-radius: 15px 15px 0 0;
+    color: #fff;
+    background-color: #06413e;
+    background-image:
+        linear-gradient(90deg, rgba(3,48,47,.96) 0%, rgba(3,65,59,.78) 42%, rgba(3,65,59,.20) 100%),
+        url("/assets/tareqix_hrms/images/oman-skyline.png");
+    background-position: center, center 48%;
+    background-size: cover;
+}
+
+.tareqix-hrms-theme .tx-oman-hero:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: auto -5% -48px -5%;
+    height: 75px;
+    border-top: 3px solid rgba(224,184,83,.85);
+    border-radius: 50% 50% 0 0;
+}
+
+.tareqix-hrms-theme .tx-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    border: 1px solid rgba(232,195,105,.5);
+    border-radius: 999px;
+    background: rgba(214,173,69,.16);
+    color: #f8df9c;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tareqix-hrms-theme .tx-hero-title {
+    margin: 0 0 7px;
+    color: #fff !important;
+    font-size: clamp(25px, 3vw, 36px);
+    font-weight: 800;
+    line-height: 1.12;
+}
+
+.tareqix-hrms-theme .tx-hero-title span {
+    margin-inline-start: 10px;
+    color: #e6bd58;
+    font-size: .78em;
+}
+
+.tareqix-hrms-theme .tx-hero-description {
+    max-width: 650px;
+    margin: 0;
+    color: rgba(255,255,255,.88);
+    font-size: 14px;
+}
+
+/* KPI cards */
+.tareqix-hrms-theme .tx-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0 0 19px;
+}
+
+.tareqix-hrms-theme .tx-kpi-card {
+    position: relative;
+    min-height: 112px;
+    padding: 17px 18px 16px;
+    overflow: hidden;
+    border: 1px solid #e6eeea;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: var(--tx-shadow);
+}
+
+.tareqix-hrms-theme .tx-kpi-card:after {
+    content: "";
+    position: absolute;
+    right: -24px;
+    top: -34px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(8,139,111,.045);
+}
+
+.tareqix-hrms-theme .tx-kpi-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #617984;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .055em;
+    text-transform: uppercase;
+}
+
+.tareqix-hrms-theme .tx-kpi-value {
+    display: block;
+    color: #102f38;
+    font-size: 27px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.tareqix-hrms-theme .tx-kpi-note {
+    display: block;
+    margin-top: 4px;
+    color: #71858c;
+    font-size: 11px;
+}
+
+.tareqix-hrms-theme .tx-kpi-bar {
+    height: 5px;
+    margin-top: 12px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #edf2f0;
+}
+
+.tareqix-hrms-theme .tx-kpi-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0b9b79, #08735f);
+}
+
+.tareqix-hrms-theme .tx-kpi-card:nth-child(3) .tx-kpi-bar span { background: #2867ad; }
+.tareqix-hrms-theme .tx-kpi-card:nth-child(4) .tx-kpi-bar span { background: #c69228; }
+
+.tareqix-hrms-theme .tx-kpi-loading {
+    color: #8ca09e;
+    font-size: 13px;
+}
+
+/* Footer accent */
+.tareqix-hrms-theme .tx-oman-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 12px 5px 0;
+    color: #718b8a;
+    font-size: 11px;
+}
+
+.tareqix-hrms-theme .tx-oman-footer strong { color: #b48420; }
+
+/* Scrollbars */
+.tareqix-hrms-theme * {
+    scrollbar-width: thin;
+    scrollbar-color: #b6cec5 transparent;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .tareqix-hrms-theme .tx-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 700px) {
+    .tareqix-hrms-theme .layout-main-section { padding: 10px !important; }
+    .tareqix-hrms-theme .tx-oman-hero { margin: -10px -10px 13px !important; padding: 22px 18px !important; min-height: 150px; }
+    .tareqix-hrms-theme .tx-kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .tareqix-hrms-theme .tx-kpi-card { padding: 12px; min-height: 100px; }
+    .tareqix-hrms-theme .tx-kpi-value { font-size: 23px; }
+}
+
+@media (max-width: 420px) {
+    .tareqix-hrms-theme .tx-kpi-grid { grid-template-columns: 1fr; }
+}
+
+
+
+
+
+
+
+
+
+/* Tareqix HRMS Banner */
+.tareqix-hrms-theme .tx-hero {
+    background-size: cover !important;
+    background-position: center 48% !important;
+    background-repeat: no-repeat !important;
+    image-rendering: auto !important;
+}
+
+
+
+/* =========================================================
+   TAREQIX HRMS - TARGETED UI IMPROVEMENTS
+   1. Sidebar title white
+   2. Slightly lighter sidebar
+   3. Form tab and content spacing
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. SIDEBAR WORKSPACE TITLE - WHITE
+--------------------------------------------------------- */
+
+.tareqix-hrms-theme .body-sidebar .sidebar-header,
+.tareqix-hrms-theme .body-sidebar .sidebar-header .header-title,
+.tareqix-hrms-theme .body-sidebar .header-title {
+    color: #ffffff !important;
+}
+
+
+/* ---------------------------------------------------------
+   2. SIDEBAR - SLIGHTLY LIGHTER GREEN
+--------------------------------------------------------- */
+
+.tareqix-hrms-theme .body-sidebar {
+    background:
+        linear-gradient(
+            145deg,
+            #126b60 0%,
+            #0c6259 48%,
+            #09564f 100%
+        ) !important;
+}
+
+/* Sidebar navigation text */
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item,
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item a,
+.tareqix-hrms-theme .body-sidebar .sidebar-item-label {
+    color: #edf8f5 !important;
+}
+
+/* Sidebar hover */
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Preserve the gold active navigation appearance */
+
+.tareqix-hrms-theme .body-sidebar .standard-sidebar-item.active-sidebar {
+    color: #173d36 !important;
+}
+
+
+/* ---------------------------------------------------------
+   3. FORM RECORD - TAB AND CONTENT SPACING
+--------------------------------------------------------- */
+
+/* Keep the form tab navigation above the form content */
+
+.tareqix-hrms-theme .form-tabs {
+    position: relative !important;
+    z-index: 5 !important;
+    background-color: #ffffff !important;
+    margin-bottom: 12px !important;
+}
+
+/* Prevent form fields from appearing underneath the tabs */
+
+.tareqix-hrms-theme .form-layout {
+    position: relative;
+    z-index: 1;
+    padding-top: 8px !important;
+}
+
+/* Keep form sections properly separated */
+
+.tareqix-hrms-theme .form-section {
+    scroll-margin-top: 130px;
+}
+
+/* Avoid unexpected clipping of form content */
+
+.tareqix-hrms-theme .layout-main-section-wrapper,
+.tareqix-hrms-theme .form-page {
+    overflow: visible;
+}
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   TAREQIX - STICKY FORM TABS
+===================================================== */
+
+/* Page header remains at the top */
+.tareqix-hrms-theme .page-head {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 120 !important;
+    background: #ffffff !important;
+}
+
+/* Keep the complete tab bar fixed below the page header */
+.tareqix-hrms-theme .form-page > .form-tabs-list {
+    position: sticky !important;
+    top: 49px !important;
+    z-index: 110 !important;
+
+    background: #ffffff !important;
+    width: 100% !important;
+}
+
+/* Do not independently move the tabs */
+.tareqix-hrms-theme .form-tabs {
+    position: relative !important;
+    top: auto !important;
+    z-index: 111 !important;
+    background: #ffffff !important;
+}
+
+/* Form content remains in normal flow */
+.tareqix-hrms-theme .form-page,
+.tareqix-hrms-theme .form-layout {
+    transform: none !important;
+}
+
+/* Opaque background prevents content showing through tabs */
+.tareqix-hrms-theme .form-tabs-list::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    z-index: -1;
+    pointer-events: none;
+}

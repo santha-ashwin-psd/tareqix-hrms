@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-11-19 13:38:27.417618",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_apfg",
+  "grade",
+  "designation",
+  "worker_base_payhour",
+  "billing_amount_per_hour",
+  "employee_count"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_apfg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "grade",
+   "fieldtype": "Link",
+   "label": "Grade",
+   "options": "Employee Grade",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "grade.custom_designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "grade.default_base_pay",
+   "fieldname": "worker_base_payhour",
+   "fieldtype": "Currency",
+   "label": "Worker Base Pay/Hour",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "grade.custom_billing_amount_per_hour",
+   "fieldname": "billing_amount_per_hour",
+   "fieldtype": "Currency",
+   "label": "Billing Amount Per Hour",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_count",
+   "fieldtype": "Data",
+   "label": "Employee Count ",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-19 16:16:42.715626",
+ "modified_by": "Administrator",
+ "module": "Tareqix Hrms",
+ "name": "Project Cost",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
