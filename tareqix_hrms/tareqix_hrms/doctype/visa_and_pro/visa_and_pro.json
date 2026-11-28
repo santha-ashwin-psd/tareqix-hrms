@@ -7,6 +7,11 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "section_break_bm3d",
+  "candidate_photo",
+  "column_break_3q75",
+  "custom_created_employee",
+  "image",
   "section_break_kxda",
   "first_name",
   "gender",
@@ -24,7 +29,6 @@
   "civil_id",
   "designation",
   "grade",
-  "custom_created_employee",
   "section_break_rjmw",
   "signed_offer_letter",
   "column_break_rxvn",
@@ -130,7 +134,7 @@
    "fieldname": "employee_type",
    "fieldtype": "Select",
    "label": "Employee Type",
-   "options": "\nDirect\nVendor",
+   "options": "\nDirect",
    "reqd": 1
   },
   {
@@ -538,12 +542,31 @@
    "fieldtype": "Select",
    "label": "Permanent Address Is",
    "options": "\nRented\nOwned"
+  },
+  {
+   "fieldname": "section_break_bm3d",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "candidate_photo",
+   "fieldtype": "Image",
+   "label": "Candidate Photo",
+   "options": "image"
+  },
+  {
+   "fieldname": "column_break_3q75",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-11-19 18:03:15.907992",
+ "modified": "2026-11-26 17:30:01.105562",
  "modified_by": "Administrator",
  "module": "Tareqix Hrms",
  "name": "Visa and PRO",

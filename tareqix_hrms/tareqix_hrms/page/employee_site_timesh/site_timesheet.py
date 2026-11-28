@@ -22,6 +22,7 @@ import json
 from datetime import datetime, timedelta
 from datetime import time as dtime
 
+
 import frappe
 from frappe import _
 from frappe.utils import flt, getdate, nowdate
@@ -96,16 +97,68 @@ def _span_hours(start, end):
     return minutes / 60
 
 
-def _calc_total(in_time, out_time, break_time):
-    """Total working hours = (OUT - IN) - BREAK, overnight aware."""
-    s, e = _to_minutes(in_time), _to_minutes(out_time)
-    if s is None or e is None:
+# def _calc_total(in_time, out_time, break_time):
+#     """Total working hours = (OUT - IN) - BREAK, overnight aware."""
+#     s, e = _to_minutes(in_time), _to_minutes(out_time)
+#     if s is None or e is None:
+#         return 0
+#     minutes = e - s
+#     if minutes < 0:
+#         minutes += 1440
+#     break_minutes = _to_minutes(break_time) or 0
+#     return max(0, (minutes - break_minutes) / 60)
+
+
+
+
+
+
+
+def _calc_total(in_date, in_time, out_date, out_time, break_time):
+    """
+    Calculate total hours using actual IN and OUT dates.
+    Supports multi-day attendance and overnight shifts.
+    """
+
+    if not in_date or not in_time or not out_date or not out_time:
         return 0
-    minutes = e - s
-    if minutes < 0:
-        minutes += 1440
-    break_minutes = _to_minutes(break_time) or 0
-    return max(0, (minutes - break_minutes) / 60)
+
+    try:
+        start_datetime = datetime.combine(
+            getdate(in_date),
+            datetime.strptime(_to_hhmm(in_time), "%H:%M").time()
+        )
+
+        end_datetime = datetime.combine(
+            getdate(out_date),
+            datetime.strptime(_to_hhmm(out_time), "%H:%M").time()
+        )
+
+        total_minutes = (
+            end_datetime - start_datetime
+        ).total_seconds() / 60
+
+        break_minutes = _to_minutes(break_time) or 0
+
+        return max(0, (total_minutes - break_minutes) / 60)
+
+    except Exception:
+        frappe.log_error(
+            frappe.get_traceback(),
+            "Site TimeSheet Total Hours Calculation"
+        )
+        raise
+
+
+
+
+
+
+
+
+
+
+
 
 
 def _fmt(value):
@@ -394,6 +447,306 @@ def get_pending_in_records(employee_ids=None):
 # if the OUT record fails, the IN record is rolled back.
 # =====================================================
 
+# @frappe.whitelist(methods=["POST"])
+# def submit_timesheet(site=None, date=None, rows=None):
+#     if not site:
+#         frappe.throw(_("Site is required"))
+
+#     if not date:
+#         frappe.throw(_("Date is required"))
+
+#     if isinstance(rows, str):
+#         rows = json.loads(rows or "[]")
+
+#     rows = rows or []
+
+#     shift_map = _build_shift_map(
+#         [r.get("employee") for r in rows], date
+#     )
+
+#     created = 0
+#     errors = []
+
+#     for index, row in enumerate(rows, start=1):
+
+#         employee = (row.get("employee") or "").strip()
+
+#         if not employee:
+#             errors.append(f"Row {index}: Employee is not selected.")
+#             continue
+
+#         in_time = _to_hhmm(row.get("in_time")) or None
+#         out_time = _to_hhmm(row.get("out_time")) or None
+        
+        
+        
+        
+#         # Check whether this row is completing an existing IN record.
+#         pending_in_record = (
+#             row.get("pending_in_record") or ""
+#         ).strip()
+
+#         pending_in_doc = None
+
+#         if pending_in_record:
+
+#             try:
+#                 pending_in_doc = frappe.get_doc(
+#                     TIMESHEET_DT,
+#                     pending_in_record
+#                 )
+
+#                 if pending_in_doc.custom_emp_name != employee:
+#                     errors.append(
+#                         f"{employee}: IN record does not belong to this employee."
+#                     )
+#                     continue
+
+#                 if pending_in_doc.custom_log_type != "IN":
+#                     errors.append(
+#                         f"{employee}: Selected record is not an IN record."
+#                     )
+#                     continue
+
+#                 if pending_in_doc.custom_inout_log_record_:
+#                     errors.append(
+#                         f"{employee}: This IN record has already been completed."
+#                     )
+#                     continue
+
+#                 # Always use the original IN time from the database.
+#                 in_time = _to_hhmm(
+#                     pending_in_doc.custom_in_time
+#                 ) or None
+
+#                 if not out_time:
+#                     errors.append(
+#                         f"{employee}: Please enter OUT time."
+#                     )
+#                     continue
+
+#             except frappe.DoesNotExistError:
+#                 errors.append(
+#                     f"{employee}: Pending IN record no longer exists."
+#                 )
+#                 continue
+
+
+#         if not in_time and not out_time:
+#             errors.append(f"{employee}: Please enter IN or OUT time.")
+#             continue
+
+#         trade = (row.get("trade") or "").strip()
+#         civil_id = (row.get("civil_id") or "").strip()
+
+#         common = {
+#             "doctype": TIMESHEET_DT,
+#             "custom_date": date,
+#             "custom_emp_name": employee,
+#             "custom_trade": "" if trade == "-" else trade,
+#             "custom_civil_id": "" if civil_id == "-" else civil_id,
+#             "custom_attendance": row.get("attendance"),
+#             "custom_current_site": site,
+#         }
+
+#         break_time = _to_hhmm(row.get("break_time")) or None
+
+#         # total = _calc_total(in_time, out_time, break_time)
+#         # normal = shift_map.get(employee, 0)
+        
+#        # =====================================================
+#        # CALCULATE ACTUAL IN / OUT DATE AND TIME 
+#        # =====================================================
+
+#         if pending_in_doc:
+#     # Use original IN record date and time
+#          actual_in_date = pending_in_doc.custom_date
+#          actual_in_time = pending_in_doc.custom_in_time
+
+#         else:
+#     # New IN record submitted on the selected date
+#          actual_in_date = date
+#          actual_in_time = in_time
+
+# # OUT always uses the currently selected date
+#         actual_out_date = date
+#         actual_out_time = out_time
+
+
+# # =====================================================
+# # CALCULATE TOTAL WORKING HOURS
+# # =====================================================
+
+#         total = _calc_total(
+#         actual_in_date,
+#         actual_in_time,
+#         actual_out_date,
+#         actual_out_time,
+#         break_time
+#       )
+
+#         normal = shift_map.get(employee, 0)
+        
+             
+
+#         savepoint = f"est_{index}"
+#         frappe.db.savepoint(savepoint)
+
+#         row_created = 0
+
+#         # try:
+
+#         #     if in_time:
+#         #         frappe.get_doc({
+#         #             **common,
+#         #             "custom_log_type": "IN",
+#         #             "custom_in_time": in_time,
+#         #             "custom_out_time": None,
+#         #             "custom_total_hrs": 0,
+#         #             "custom_rest_hrs": None,
+#         #             "custom_normal_hrs": 0,
+#         #         }).insert()
+
+#         #         row_created += 1
+
+#         #     if out_time:
+#         #         frappe.get_doc({
+#         #             **common,
+#         #             "custom_log_type": "OUT",
+#         #             "custom_in_time": None,
+#         #             "custom_out_time": out_time,
+#         #             "custom_total_hrs": _fmt(total),
+#         #             "custom_rest_hrs": break_time,
+#         #             "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
+#         #             "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
+#         #             "custom_normal_hrs": _fmt(normal),
+#         #         }).insert()
+
+#         #         row_created += 1
+
+#         #     created += row_created
+        
+        
+        
+        
+        
+#         try:
+#             in_doc = pending_in_doc
+#             out_doc = None
+            
+            
+#             if in_time and not pending_in_record:
+
+#             # if in_time:
+#                 in_doc = frappe.get_doc({
+#                     **common,
+#                     "custom_log_type": "IN",
+#                     "custom_in_time": in_time,
+#                     "custom_out_time": None,
+#                     "custom_total_hrs": 0,
+#                     "custom_rest_hrs": None,
+#                     "custom_normal_hrs": 0,
+#                 }).insert()
+
+#                 row_created += 1
+                
+                
+                
+                
+                
+                
+                
+#                             # Recheck pending IN record before creating OUT
+#             if pending_in_record:
+#                 pending_in_doc.reload()
+
+#                 if pending_in_doc.custom_inout_log_record_:
+#                     frappe.throw(
+#                         _("This IN record has already been completed.")
+#                     )
+
+#             # Create OUT record
+#             if out_time:
+#                 out_doc = frappe.get_doc({
+#                     **common,
+#                     "custom_log_type": "OUT",
+#                     "custom_in_time": None,
+#                     "custom_out_time": out_time,
+#                     "custom_total_hrs": _fmt(total),
+#                     "custom_rest_hrs": break_time,
+#                     "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
+#                     "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
+#                     "custom_normal_hrs": _fmt(normal),
+#                 }).insert()
+
+#                 row_created += 1
+                
+                
+                
+
+#             # if out_time:
+#             #     out_doc = frappe.get_doc({
+#             #         **common,
+#             #         "custom_log_type": "OUT",
+#             #         "custom_in_time": None,
+#             #         "custom_out_time": out_time,
+#             #         "custom_total_hrs": _fmt(total),
+#             #         "custom_rest_hrs": break_time,
+#             #         "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
+#             #         "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
+#             #         "custom_normal_hrs": _fmt(normal),
+#             #     }).insert()
+
+#             #     row_created += 1
+
+#             # Link IN and OUT records to each other
+#             if in_doc and out_doc:
+#                 in_doc.db_set(
+#                     "custom_inout_log_record_",
+#                     out_doc.name,
+#                     update_modified=False
+#                 )
+
+#                 out_doc.db_set(
+#                     "custom_inout_log_record_",
+#                     in_doc.name,
+#                     update_modified=False
+#                 )
+
+#             created += row_created
+
+
+#         except Exception as e:
+
+#             frappe.db.rollback(save_point=savepoint)
+#             frappe.clear_messages()
+
+#             # Whole employee rolled back, so nothing is added to `created`.
+
+#             frappe.log_error(
+#                 title=f"Site TimeSheet submit failed: {employee}",
+#                 message=frappe.get_traceback(),
+#             )
+
+#             errors.append(f"{employee}: {str(e) or 'Unknown error'}")
+
+#     return {"created": created, "errors": errors}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @frappe.whitelist(methods=["POST"])
 def submit_timesheet(site=None, date=None, rows=None):
     if not site:
@@ -424,63 +777,130 @@ def submit_timesheet(site=None, date=None, rows=None):
 
         in_time = _to_hhmm(row.get("in_time")) or None
         out_time = _to_hhmm(row.get("out_time")) or None
-        
-        
-        
-        
-        # Check whether this row is completing an existing IN record.
+
+        # Both IN and OUT submitted together:
+        # Allow creation of a new IN + OUT pair.
+        both_in_out = bool(in_time and out_time)
+
         pending_in_record = (
             row.get("pending_in_record") or ""
         ).strip()
 
         pending_in_doc = None
 
-        if pending_in_record:
+        # Do not use an older pending IN when both times
+        # are submitted together.
+        if both_in_out:
+            pending_in_record = ""
 
-            try:
+        # =====================================================
+        # FIND / VALIDATE INCOMPLETE IN RECORD
+        # =====================================================
+
+        if out_time and not in_time:
+
+            # If the frontend supplied a pending IN record,
+            # validate that record.
+            if pending_in_record:
+                try:
+                    pending_in_doc = frappe.get_doc(
+                        TIMESHEET_DT,
+                        pending_in_record
+                    )
+
+                except frappe.DoesNotExistError:
+                    errors.append(
+                        f"{employee}: Pending IN record no longer exists."
+                    )
+                    continue
+
+            else:
+                # Automatically find an incomplete IN record
+                # for this employee.
+                pending_rows = frappe.get_all(
+                    TIMESHEET_DT,
+                    filters={
+                        "custom_emp_name": employee,
+                        "custom_log_type": "IN",
+                        "custom_inout_log_record_": ["is", "not set"],
+                    },
+                    fields=["name"],
+                    order_by="custom_date desc, creation desc",
+                    limit_page_length=1,
+                )
+
+                if not pending_rows:
+                    errors.append(
+                        f"{employee}: There is no IN record. "
+                        "Please create an IN record first."
+                    )
+                    continue
+
+                pending_in_record = pending_rows[0].name
+
                 pending_in_doc = frappe.get_doc(
                     TIMESHEET_DT,
                     pending_in_record
                 )
 
-                if pending_in_doc.custom_emp_name != employee:
-                    errors.append(
-                        f"{employee}: IN record does not belong to this employee."
-                    )
-                    continue
-
-                if pending_in_doc.custom_log_type != "IN":
-                    errors.append(
-                        f"{employee}: Selected record is not an IN record."
-                    )
-                    continue
-
-                if pending_in_doc.custom_inout_log_record_:
-                    errors.append(
-                        f"{employee}: This IN record has already been completed."
-                    )
-                    continue
-
-                # Always use the original IN time from the database.
-                in_time = _to_hhmm(
-                    pending_in_doc.custom_in_time
-                ) or None
-
-                if not out_time:
-                    errors.append(
-                        f"{employee}: Please enter OUT time."
-                    )
-                    continue
-
-            except frappe.DoesNotExistError:
+            if pending_in_doc.custom_emp_name != employee:
                 errors.append(
-                    f"{employee}: Pending IN record no longer exists."
+                    f"{employee}: IN record does not belong to this employee."
                 )
                 continue
 
+            if pending_in_doc.custom_log_type != "IN":
+                errors.append(
+                    f"{employee}: Selected record is not an IN record."
+                )
+                continue
+
+            if pending_in_doc.custom_inout_log_record_:
+                errors.append(
+                    f"{employee}: This IN record has already been completed."
+                )
+                continue
+
+            # Always use original IN time from database.
+            in_time = _to_hhmm(
+                pending_in_doc.custom_in_time
+            ) or None
+
+            if not in_time:
+                errors.append(
+                    f"{employee}: Original IN time is missing."
+                )
+                continue
+
+        # =====================================================
+        # IN ONLY: CHECK FOR EXISTING INCOMPLETE IN
+        # =====================================================
+
+        if in_time and not out_time:
+
+            existing_in = frappe.get_all(
+                TIMESHEET_DT,
+                filters={
+                    "custom_emp_name": employee,
+                    "custom_log_type": "IN",
+                    "custom_inout_log_record_": ["is", "not set"],
+                },
+                fields=["name"],
+                order_by="custom_date desc, creation desc",
+                limit_page_length=1,
+            )
+
+            if existing_in:
+                errors.append(
+                    f"{employee}: IN record already available. "
+                    "Please complete that record."
+                )
+                continue
 
         if not in_time and not out_time:
-            errors.append(f"{employee}: Please enter IN or OUT time.")
+            errors.append(
+                f"{employee}: Please enter IN or OUT time."
+            )
             continue
 
         trade = (row.get("trade") or "").strip()
@@ -498,7 +918,36 @@ def submit_timesheet(site=None, date=None, rows=None):
 
         break_time = _to_hhmm(row.get("break_time")) or None
 
-        total = _calc_total(in_time, out_time, break_time)
+        # =====================================================
+        # CALCULATE ACTUAL IN / OUT DATE AND TIME
+        # =====================================================
+
+        if pending_in_doc:
+            actual_in_date = pending_in_doc.custom_date
+            actual_in_time = pending_in_doc.custom_in_time
+
+        else:
+            actual_in_date = date
+            actual_in_time = in_time
+
+        actual_out_date = date
+        actual_out_time = out_time
+
+        # =====================================================
+        # CALCULATE TOTAL WORKING HOURS
+        # =====================================================
+
+        if actual_in_time and actual_out_time:
+            total = _calc_total(
+                actual_in_date,
+                actual_in_time,
+                actual_out_date,
+                actual_out_time,
+                break_time
+            )
+        else:
+            total = 0
+
         normal = shift_map.get(employee, 0)
 
         savepoint = f"est_{index}"
@@ -506,50 +955,15 @@ def submit_timesheet(site=None, date=None, rows=None):
 
         row_created = 0
 
-        # try:
-
-        #     if in_time:
-        #         frappe.get_doc({
-        #             **common,
-        #             "custom_log_type": "IN",
-        #             "custom_in_time": in_time,
-        #             "custom_out_time": None,
-        #             "custom_total_hrs": 0,
-        #             "custom_rest_hrs": None,
-        #             "custom_normal_hrs": 0,
-        #         }).insert()
-
-        #         row_created += 1
-
-        #     if out_time:
-        #         frappe.get_doc({
-        #             **common,
-        #             "custom_log_type": "OUT",
-        #             "custom_in_time": None,
-        #             "custom_out_time": out_time,
-        #             "custom_total_hrs": _fmt(total),
-        #             "custom_rest_hrs": break_time,
-        #             "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
-        #             "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
-        #             "custom_normal_hrs": _fmt(normal),
-        #         }).insert()
-
-        #         row_created += 1
-
-        #     created += row_created
-        
-        
-        
-        
-        
         try:
             in_doc = pending_in_doc
             out_doc = None
-            
-            
-            if in_time and not pending_in_record:
 
-            # if in_time:
+            # =================================================
+            # CREATE IN RECORD
+            # =================================================
+
+            if in_time and not pending_in_doc:
                 in_doc = frappe.get_doc({
                     **common,
                     "custom_log_type": "IN",
@@ -561,15 +975,12 @@ def submit_timesheet(site=None, date=None, rows=None):
                 }).insert()
 
                 row_created += 1
-                
-                
-                
-                
-                
-                
-                
-                            # Recheck pending IN record before creating OUT
-            if pending_in_record:
+
+            # =================================================
+            # RECHECK PENDING IN BEFORE CREATING OUT
+            # =================================================
+
+            if pending_in_doc:
                 pending_in_doc.reload()
 
                 if pending_in_doc.custom_inout_log_record_:
@@ -577,7 +988,10 @@ def submit_timesheet(site=None, date=None, rows=None):
                         _("This IN record has already been completed.")
                     )
 
-            # Create OUT record
+            # =================================================
+            # CREATE OUT RECORD
+            # =================================================
+
             if out_time:
                 out_doc = frappe.get_doc({
                     **common,
@@ -586,32 +1000,21 @@ def submit_timesheet(site=None, date=None, rows=None):
                     "custom_out_time": out_time,
                     "custom_total_hrs": _fmt(total),
                     "custom_rest_hrs": break_time,
-                    "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
-                    "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
+                    "custom_ot_day_hrs": _to_hhmm(
+                        row.get("ot_day")
+                    ) or None,
+                    "custom_ot_night_hrs": _to_hhmm(
+                        row.get("ot_night")
+                    ) or None,
                     "custom_normal_hrs": _fmt(normal),
                 }).insert()
 
                 row_created += 1
-                
-                
-                
 
-            # if out_time:
-            #     out_doc = frappe.get_doc({
-            #         **common,
-            #         "custom_log_type": "OUT",
-            #         "custom_in_time": None,
-            #         "custom_out_time": out_time,
-            #         "custom_total_hrs": _fmt(total),
-            #         "custom_rest_hrs": break_time,
-            #         "custom_ot_day_hrs": _to_hhmm(row.get("ot_day")) or None,
-            #         "custom_ot_night_hrs": _to_hhmm(row.get("ot_night")) or None,
-            #         "custom_normal_hrs": _fmt(normal),
-            #     }).insert()
+            # =================================================
+            # LINK IN AND OUT RECORDS
+            # =================================================
 
-            #     row_created += 1
-
-            # Link IN and OUT records to each other
             if in_doc and out_doc:
                 in_doc.db_set(
                     "custom_inout_log_record_",
@@ -627,24 +1030,24 @@ def submit_timesheet(site=None, date=None, rows=None):
 
             created += row_created
 
-
         except Exception as e:
 
             frappe.db.rollback(save_point=savepoint)
             frappe.clear_messages()
-
-            # Whole employee rolled back, so nothing is added to `created`.
 
             frappe.log_error(
                 title=f"Site TimeSheet submit failed: {employee}",
                 message=frappe.get_traceback(),
             )
 
-            errors.append(f"{employee}: {str(e) or 'Unknown error'}")
+            errors.append(
+                f"{employee}: {str(e) or 'Unknown error'}"
+            )
 
-    return {"created": created, "errors": errors}
-
-
+    return {
+        "created": created,
+        "errors": errors
+    }
 
 
 

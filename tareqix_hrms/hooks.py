@@ -293,6 +293,9 @@ app_license = "mit"
 # app_include_css = [
 #     "/assets/tareqix_hrms/css/hrms_theme.css"
 # ]
+
+
+
 app_include_js = [
     "/assets/tareqix_hrms/js/hrms_theme.js"
 ]
